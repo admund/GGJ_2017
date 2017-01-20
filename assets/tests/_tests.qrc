@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/tests">
+        <file>table/TableTest.qml</file>
+        <file>skills/SkillsTest.qml</file>
+    </qresource>
+</RCC>

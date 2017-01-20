@@ -1,0 +1,14 @@
+.pragma library
+
+var Black = "#000000"
+var Blue = "#0000FF"
+var DarkGray = "#545454"
+var Gray  = "#808080"
+var Green = "#00FF00"
+var DarkGreen = "#006400"
+var Red = "#FF0000"
+var White = "#FFFFFF"
+var Yellow = "#FFFF00"
+
+var DefaultTextColor = White
+var DisabledTextColor = Gray

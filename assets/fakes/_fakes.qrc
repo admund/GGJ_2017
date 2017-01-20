@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/fakes">
+        <file>FakeCpp.qml</file>
+        <file>login/LoginScreenFake.qml</file>
+        <file>table/TableScreenFake.qml</file>
+        <file>table/CardFake.qml</file>
+        <file>skills/SkillsScreenFake.qml</file>
+        <file>skills/PlayerSkillSlotFake.qml</file>
+        <file>login/MatchingScreenFake.qml</file>
+        <file>skills/SkillFake.qml</file>
+    </qresource>
+</RCC>

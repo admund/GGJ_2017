@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/fonts">
+        <file>open_sans_cond_bold.ttf</file>
+    </qresource>
+</RCC>

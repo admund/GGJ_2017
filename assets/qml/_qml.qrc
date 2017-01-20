@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>main.qml</file>
+        <file>appStructure/+tablet7/DeviceSizeDependentGame.qml</file>
+        <file>appStructure/+tablet10/DeviceSizeDependentGame.qml</file>
+        <file>appStructure/DeviceSizeDependentGame.qml</file>
+        <file>appStructure/Game.qml</file>
+        <file>appStructure/GameLoader.qml</file>
+        <file>appStructure/GameScreen.qml</file>
+        <file>appStructure/Helpers.js</file>
+        <file>appStructure/ImagePath.js</file>
+        <file>appStructure/ScreenSwitcher.qml</file>
+        <file>dialogs/BaseDialog.qml</file>
+        <file>views/ActivityIndicator.qml</file>
+        <file>views/AutoRefreshingImage.qml</file>
+        <file>views/Colors.js</file>
+        <file>views/OpenSansText.qml</file>
+        <file>views/Toast.qml</file>
+        <file>views/ImageProgressBar.qml</file>
+        <file>screens/AirportScreen.qml</file>
+    </qresource>
+</RCC>

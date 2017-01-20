@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>temp_table_back.png</file>
+        <file>player_lvl_full.png</file>
+        <file>player_lvl_empty.png</file>
+    </qresource>
+</RCC>

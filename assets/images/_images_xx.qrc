@@ -8,5 +8,15 @@
         <file>plane.png</file>
         <file>map_london.png</file>
         <file>panel_objectives.png</file>
+        <file>tlo_ciemne.png</file>
+        <file>tlo_hangar.png</file>
+        <file>tlo_jasne.png</file>
+        <file>tlo_parking.png</file>
+        <file>tlo_parking2.png</file>
+        <file>tlo_pas.png</file>
+        <file>tlo_pas_poczatek.png</file>
+        <file>tlo_pas2.png</file>
+        <file>tlo_rozek.png</file>
+        <file>tlo_woda.png</file>
     </qresource>
 </RCC>

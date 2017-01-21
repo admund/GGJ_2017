@@ -50,4 +50,13 @@ DISTFILES += \
     assets/images/plane_2.png \
     assets/images/flag_panel.png \
     assets/images/map_london.png \
-    assets/images/panel_objectives.png
+    assets/images/panel_objectives.png \
+    assets/images/tlo_ciemne.png \
+    assets/images/tlo_hangar.png \
+    assets/images/tlo_jasne.png \
+    assets/images/tlo_parking.png \
+    assets/images/tlo_parking2.png \
+    assets/images/tlo_pas.png \
+    assets/images/tlo_pas2.png \
+    assets/images/tlo_pas_poczatek.png \
+    assets/images/tlo_rozek.png

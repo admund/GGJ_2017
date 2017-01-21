@@ -42,13 +42,13 @@ GameScreen {
             width: airportGrid.cellWidth
             height: airportGrid.cellHeight
 
-            color: Colors.Red
-
-            Rectangle {
-                width: parent.width * .95
-                height: parent.height * .95
+            Image {
+                width: parent.width
+                height: parent.height
 
                 anchors.centerIn: parent
+
+                rotation: airportGridModelRole.tileRotation
 
                 OpenSansText {
                     anchors.fill: parent
@@ -59,15 +59,35 @@ GameScreen {
                     color: Colors.Black
                 }
 
-                color: getTile(airportGridModelRole.tileType)
+//                color: getTile(airportGridModelRole.tileType)
+                source: getTile(airportGridModelRole.tileType)
             }
 
             MouseArea {
-                anchors.fill: parent
+                id: tileTypeClick
+                width: parent.width/2
+                height: parent.height
 
                 onClicked: {
                     if (airportLogic.editMode) {
-                        airportGridModelRole.tileType = (airportGridModelRole.tileType + 1) % 6
+                        airportGridModelRole.tileType = (airportGridModelRole.tileType + 1) % 8
+                    }
+                }
+            }
+
+            MouseArea {
+                id: tileRotationClick
+                width: parent.width/2
+                height: parent.height
+
+                anchors.left: tileTypeClick.right
+
+                onClicked: {
+                    if (airportLogic.editMode) {
+                        airportGridModelRole.tileRotation = airportGridModelRole.tileRotation + 90
+                        if (airportGridModelRole.tileRotation >= 360) {
+                            airportGridModelRole.tileRotation = airportGridModelRole.tileRotation - 360
+                        }
                     }
                 }
             }
@@ -162,19 +182,39 @@ GameScreen {
         }
     }
 
+//    function getTile(tileType) {
+//        if (tileType === 1) {
+//            return Colors.Gray
+//        } else if (tileType === 2) {
+//            return Colors.White
+//        } else if (tileType === 3) {
+//            return Colors.Blue
+//        } else if (tileType === 4) {
+//            return Colors.Yellow
+//        } else if (tileType === 5) {
+//            return Colors.Red
+//        } else {
+//            return Colors.DarkGreen;
+//        }
+//    }
+
     function getTile(tileType) {
         if (tileType === 1) {
-            return Colors.Gray
+            return "../../images/tlo_pas.png"//ROAD
         } else if (tileType === 2) {
-            return Colors.White
+            return "../../images/tlo_hangar.png"//BUILDINGS
         } else if (tileType === 3) {
-            return Colors.Blue
+            return "../../images/tlo_woda.png"//SEA
         } else if (tileType === 4) {
-            return Colors.Yellow
+            return "../../images/tlo_pas_poczatek.png"//RUNWAY_START
         } else if (tileType === 5) {
-            return Colors.Red
+            return "../../images/tlo_parking2.png"//Colors.Red
+        } else if (tileType === 6) {
+            return "../../images/tlo_rozek.png"//GRASS_2
+        } else if (tileType === 7) {
+            return "../../images/tlo_parking.png"//ROAD_2
         } else {
-            return Colors.DarkGreen;
+            return "../../images/tlo_ciemne.png"//GRASS
         }
     }
 }

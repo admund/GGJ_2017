@@ -35,7 +35,7 @@ void AirportLogic::init()
     qsrand(QDateTime::currentMSecsSinceEpoch());
 
     QString levelData("");
-    const QString fileNameLevel(("E:\\Projekty\\ggj2017\\UNNAMED\\level_") + QString::number(1) + QString(".json"));
+    const QString fileNameLevel(("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\level_") + QString::number(1) + QString(".json"));
     getStringFromFile(fileNameLevel, levelData);
 
     QJsonObject gridObj;
@@ -47,13 +47,14 @@ void AirportLogic::init()
 
             AirportTileModel* airportTileModel = new AirportTileModel(this);
             airportTileModel->set_tileType(tile["tile_type"].toInt());
+            airportTileModel->set_tileRotation(tile["tile_rotation"].toInt());
 
             airportGrid()->addAirportTile(airportTileModel);
         }
     }
 
     QString spawnsData("");
-    const QString fileNameSpawns(("E:\\Projekty\\ggj2017\\UNNAMED\\spawns_level_") + QString::number(1) + QString(".json"));
+    const QString fileNameSpawns(("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\spawns_level_") + QString::number(1) + QString(".json"));
     getStringFromFile(fileNameSpawns, spawnsData);
 
     QJsonObject spawnsObj;
@@ -73,7 +74,7 @@ void AirportLogic::init()
     }
 
 //    QString planesData("");
-//    const QString fileNamePlanes(("E:\\Projekty\\ggj2017\\UNNAMED\\planes_level_") + QString::number(1) + QString(".json"));
+//    const QString fileNamePlanes(("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\planes_level_") + QString::number(1) + QString(".json"));
 //    getStringFromFile(fileNamePlanes, planesData);
 
 //    QJsonObject planesObj;
@@ -145,7 +146,7 @@ void AirportLogic::checkCollisions()
                 airportGrid()->get(j)->set_touchedBy(QString::number(plane->id()));
 
                 int tileType = airportGrid()->get(j)->tileType();
-                if (tileType == AirportTileModel::TILE_TYPE_GRASS) {
+                if (tileType == AirportTileModel::TILE_TYPE_GRASS || tileType == AirportTileModel::TILE_TYPE_GRASS_2) {
                     plane->goOnGrass(true);
                 } else if (tileType == AirportTileModel::TILE_TYPE_BUILDING) {
                     plane->hitBuilding();
@@ -215,6 +216,7 @@ void AirportLogic::saveMap()
         for (int i=0; i<airportGrid()->size(); i++) {
             QJsonObject grid;
             grid.insert("tile_type", airportGrid()->get(i)->tileType());
+            grid.insert("tile_rotation", airportGrid()->get(i)->tileRotation());
             tileArray.append(grid);
         }
         obj.insert("grid", tileArray);
@@ -222,7 +224,7 @@ void AirportLogic::saveMap()
         QJsonDocument doc(obj);
         QString strJson(doc.toJson(QJsonDocument::Compact));
 
-        QString filename(QString("E:\\Projekty\\ggj2017\\UNNAMED\\data_") + QString::number(QDateTime::currentMSecsSinceEpoch()) + QString(".json"));
+        QString filename(QString("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\level_") + QString::number(QDateTime::currentMSecsSinceEpoch()) + QString(".json"));
         QFile file(filename);
         if (file.open(QIODevice::ReadWrite)) {
             QTextStream stream(&file);

@@ -11,6 +11,7 @@ class AirportTileModel : public QObject
 
     AUTO_Q_PROPERTY(QString, touchedBy)
     AUTO_Q_PROPERTY(int, tileType)
+    AUTO_Q_PROPERTY(int, tileRotation)
 
 public:
     explicit AirportTileModel(QObject* parent = 0);
@@ -21,6 +22,8 @@ public:
     static const int TILE_TYPE_SEA = 3;
     static const int TILE_TYPE_RUNWAY_START = 4;
     static const int TILE_TYPE_RAMP = 5;
+    static const int TILE_TYPE_GRASS_2 = 6;
+    static const int TILE_TYPE_ROAD_2 = 7;
 
     void clear();
 };

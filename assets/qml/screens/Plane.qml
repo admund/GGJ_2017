@@ -18,7 +18,7 @@ Rectangle {
     x: planModel.posX
     y: planModel.posY
 
-    color: isSelected ? Colors.LightBlue : "#0000B000"
+//    color: isSelected ? Colors.LightBlue : "#0000B000"
 
     rotation: planModel.moveRotation
 
@@ -41,7 +41,7 @@ Rectangle {
             bottom: plane.top
         }
 
-        color: Colors.White
+        color: Colors.Red
 
         OpenSansText {
             id: fuellText

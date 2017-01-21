@@ -47,6 +47,9 @@ public:
 
     Q_INVOKABLE void move(int deltaTime);
 
+signals:
+    void planeDestroyed(int playerId);
+
 private:
     int lastFuellSubstraction = 0;
 };

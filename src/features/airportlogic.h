@@ -29,6 +29,9 @@ public:
     void init(); // TODO add some JSON path
     void saveMap();
 
+private slots:
+    void onPlaneDestroyed(int planeId);
+
 private:
     bool isInited = false;
     int cellSize = 0;

@@ -75,6 +75,8 @@ void AirportLogic::init()
             planeList()->addPlaneModel(planeModel);
 
             planeCnt++;
+
+            connect(planeModel, SIGNAL(planeDestroyed(int)), this, SLOT(onPlaneDestroyed(int)));
         }
     }
 
@@ -165,6 +167,14 @@ void AirportLogic::saveMap()
             stream << strJson << endl;
             qDebug() << "SAVED " << filename;
         }
+    }
+}
+
+void AirportLogic::onPlaneDestroyed(int planeId)
+{
+    qDebug() << "AirportLogic::onPlaneDestroyed(int planeId)" << planeId;
+    if (planeList()->get(selectedPlane())->id() == planeId) {
+        changeSelectedPlane();
     }
 }
 

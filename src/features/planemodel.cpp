@@ -43,38 +43,22 @@ void PlaneModel::clear()
 }
 
 #include <QDebug>
-//void PlaneModel::changeMoveDirection()
-//{
-//    if (isRightFlagUp() == isLeftFlagUp()) {
-//        if (isRightFlagUp()) {
-//            set_moveDirection(MOVE_GO);
-//        } else {
-//            set_moveDirection(MOVE_STOP);
-//        }
-//    } else {
-//        if (isRightFlagUp()) {
-//            set_moveDirection(MOVE_RIGHT);
-//        } else {
-//            set_moveDirection(MOVE_LEFT);
-//        }
-//    }
-
-//    //    qDebug() << "AirportLogic::changeMoveDirection()" << moveDirection();
-//}
-
 void PlaneModel::hitBuilding()
 {
     set_fuell(0);
+    emit planeDestroyed(id());
 }
 
 void PlaneModel::goToSea()
 {
     set_fuell(0);
+    emit planeDestroyed(id());
 }
 
 void PlaneModel::hitOtherPlane()
 {
     set_fuell(0);
+    emit planeDestroyed(id());
 }
 
 void PlaneModel::goOnGrass(bool isTrue)
@@ -101,11 +85,8 @@ void PlaneModel::changeMoveDirection(int moveDirection)
     }
 }
 
-#include <QDebug>
 void PlaneModel::move(int deltaTime)
 {
-    Q_UNUSED(deltaTime)
-
     if (moveDirection() != MOVE_STOP) {
         if (moveDirection() == MOVE_RIGHT) {
             double newRotation = moveRotation() + rotation();
@@ -130,10 +111,13 @@ void PlaneModel::move(int deltaTime)
         }
 
         lastFuellSubstraction += deltaTime;
-        if (isOnGrass() && lastFuellSubstraction > 500
-                || lastFuellSubstraction > 1000) {
+        if ((isOnGrass() && lastFuellSubstraction > 500) || lastFuellSubstraction > 1000) {
             set_fuell(fuell() - 1);
             lastFuellSubstraction = 0;
+
+            if (fuell() <= 0) {
+                emit planeDestroyed(id());
+            }
         }
     }
 }

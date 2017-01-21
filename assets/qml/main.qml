@@ -7,8 +7,8 @@ import "appStructure"
 ApplicationWindow {
     id: rootWindow
 
-    width: 1366
-    height: 768
+    width: 1280//1366
+    height: 720//768
 
     visibility: Window.AutomaticVisibility
     visible: true

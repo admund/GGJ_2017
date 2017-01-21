@@ -4,20 +4,17 @@
 #include <QObject>
 #include <QList>
 
-#include "planeflagmodel.h"
+#include "planemodel.h"
 #include "../macros.h"
 
 class FlagControllerLogic : public QObject
 {
     Q_OBJECT
 
-    AUTO_Q_PROPERTY(PlaneFlagModel*, planeFlag)
+    AUTO_Q_PROPERTY(PlaneModel*, selectedPlane)
 
 public:
     explicit FlagControllerLogic(QObject* parent = 0);
-
-private:
-//    QList<PlaneFlagModel*> planeFlagList;
 };
 
 #endif // FLAGCONTROLLERLOGIC_H

@@ -7,5 +7,6 @@
         <file>flag_left.png</file>
         <file>flag_right.png</file>
         <file>flag_stop.png</file>
+        <file>plane.png</file>
     </qresource>
 </RCC>

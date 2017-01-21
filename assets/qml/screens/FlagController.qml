@@ -6,25 +6,29 @@ Rectangle {
     width: 200
     height: 300
 
-    property QtObject planeFlagModel
+    property QtObject planeModel
+
+    property bool isRightFlagUp: planeModel ? planeModel.isRightFlagUp : false
+    property bool isLeftFlagUp: planeModel ? planeModel.isLeftFlagUp : false
 
     color: Colors.LightBlue
 
     Image {
         anchors.fill: parent
 
-        source: getFlagImg(planeFlagModel)
+//        source: getFlagImg(planeFlagModel)
+        source: getFlagImg()
     }
 
-    function getFlagImg(planFlagModel) {
-        if (planFlagModel.isRightFlagUp === planFlagModel.isLeftFlagUp) {
-            if (planFlagModel.isRightFlagUp) {
+    function getFlagImg() {
+        if (isRightFlagUp === isLeftFlagUp) {
+            if (isRightFlagUp) {
                 return "../../images/flag_go.png"
             } else {
                 return "../../images/flag_stop.png"
             }
         } else {
-            if (planFlagModel.isRightFlagUp) {
+            if (isRightFlagUp) {
                 return "../../images/flag_right.png"
             } else {
                 return "../../images/flag_left.png"

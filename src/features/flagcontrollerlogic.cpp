@@ -2,6 +2,6 @@
 
 FlagControllerLogic::FlagControllerLogic(QObject* parent)
     : QObject(parent)
-    , m_planeFlag(new PlaneFlagModel(this))
+    , m_selectedPlane(nullptr)
 {
 }

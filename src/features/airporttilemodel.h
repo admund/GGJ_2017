@@ -15,6 +15,7 @@ class AirportTileModel : public QObject
 {
     Q_OBJECT
 
+    AUTO_Q_PROPERTY(QString, touchedBy)
     AUTO_Q_PROPERTY(int, tileType)
 
 public:

@@ -26,8 +26,12 @@ GameScreen {
             right: flagController.left
         }
 
-        cellWidth: parent.width / 21
+        cellWidth: (parent.width - flagController.width) / 17
         cellHeight: cellWidth
+
+        Component.onCompleted: {
+            airportLogic.setCellSize(cellWidth)
+        }
 
         interactive: false
 
@@ -46,6 +50,15 @@ GameScreen {
 
                 anchors.centerIn: parent
 
+                OpenSansText {
+                    anchors.fill: parent
+                    anchors.centerIn: parent
+
+                    text: airportGridModelRole.touchedBy
+
+                    color: Colors.Black
+                }
+
                 color: getTile(airportGridModelRole.tileType)
             }
 
@@ -61,6 +74,30 @@ GameScreen {
         }
     }
 
+    Repeater {
+        model: airportLogic.planeList
+
+        delegate: Item {
+            Plane {
+                id: plane
+                planModel: planeModelRole
+
+                isSelected: airportLogic.selectedPlane === index
+
+                }
+
+//            Rectangle {
+//                x: plane.x
+//                y: plane.y
+//                width: plane.width
+//                height: plane.height
+//                radius: width/2
+
+//                color: Colors.Yellow
+//            }
+            }
+    }
+
     FlagController {
         id: flagController
 
@@ -69,7 +106,17 @@ GameScreen {
             right: parent.right
         }
 
-        planeFlagModel: airportLogic.flagController.planeFlag
+        planeModel: airportLogic.flagController.selectedPlane
+    }
+
+    Timer {
+        interval: 100
+        repeat: true
+        running: airportLogic.planeList.count > 0
+
+        onTriggered: {
+            airportLogic.checkCollisions()
+        }
     }
 
     function getTile(tileType) {

@@ -15,7 +15,9 @@ HEADERS += \
     src/keyboardfilter.h \
     src/jsonhelpers.h \
     src/features/flagcontrollerlogic.h \
-    src/features/planeflagmodel.h
+    src/features/planeflagmodel.h \
+    src/features/planemodel.h \
+    src/features/planelistmodel.h
 
 
 SOURCES += src/main.cpp \
@@ -28,7 +30,9 @@ SOURCES += src/main.cpp \
     src/keyboardfilter.cpp \
     src/jsonhelpers.cpp \
     src/features/flagcontrollerlogic.cpp \
-    src/features/planeflagmodel.cpp
+    src/features/planeflagmodel.cpp \
+    src/features/planemodel.cpp \
+    src/features/planelistmodel.cpp
 
 
 RESOURCES += assets/qml/_qml.qrc \
@@ -37,3 +41,6 @@ RESOURCES += assets/qml/_qml.qrc \
     assets/tests/_tests.qrc \
     assets/fakes/_fakes.qrc \
     assets/images/_images_xx.qrc
+
+DISTFILES += \
+    assets/images/plane_2.png

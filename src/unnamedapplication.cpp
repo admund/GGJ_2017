@@ -21,6 +21,7 @@ UnNamedApplication::UnNamedApplication(int& argc, char** argv)
     mQmlApplicationEngine = new QQmlApplicationEngine();
     mQmlApplicationEngine->rootContext()->setContextProperty("_cppLogic", mSpinacz->root());
 
+
     registerAllQmlModelTypes();
     registerAllMetaTypes();
 
@@ -42,7 +43,7 @@ void UnNamedApplication::registerAllQmlModelTypes() const
     // All model classes exposed to QML must be registered here
 //    QML_REGISTER_UNCREATABLE_TYPE(CardModel)
     QML_REGISTER_UNCREATABLE_TYPE(AirportTileModel)
-
+    QML_REGISTER_UNCREATABLE_TYPE(PlaneModel)
 }
 
 void UnNamedApplication::registerAllMetaTypes() const

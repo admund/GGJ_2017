@@ -19,5 +19,6 @@
         <file>views/ImageProgressBar.qml</file>
         <file>screens/AirportScreen.qml</file>
         <file>screens/FlagController.qml</file>
+        <file>screens/Plane.qml</file>
     </qresource>
 </RCC>

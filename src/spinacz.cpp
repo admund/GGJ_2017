@@ -31,9 +31,18 @@ bool Spinacz::eventFilter(QObject *watched, QEvent *event)
 
         if (keyEvent->key() == Qt::Key_F12) {
             root()->airportLogic()->saveMap();
+            return true;
         }
 
-        return true;
+        if (keyEvent->key() == Qt::Key_Q) {
+            root()->airportLogic()->changeFlag(false);
+            return true;
+        }
+
+        if (keyEvent->key() == Qt::Key_W) {
+            root()->airportLogic()->changeFlag(true);
+            return true;
+        }
     }
 
     return false;

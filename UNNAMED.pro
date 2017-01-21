@@ -13,7 +13,9 @@ HEADERS += \
     src/features/airportgridmodel.h \
     src/features/airporttilemodel.h \
     src/keyboardfilter.h \
-    src/jsonhelpers.h
+    src/jsonhelpers.h \
+    src/features/flagcontrollerlogic.h \
+    src/features/planeflagmodel.h
 
 
 SOURCES += src/main.cpp \
@@ -24,7 +26,9 @@ SOURCES += src/main.cpp \
     src/features/airportgridmodel.cpp \
     src/features/airporttilemodel.cpp \
     src/keyboardfilter.cpp \
-    src/jsonhelpers.cpp
+    src/jsonhelpers.cpp \
+    src/features/flagcontrollerlogic.cpp \
+    src/features/planeflagmodel.cpp
 
 
 RESOURCES += assets/qml/_qml.qrc \

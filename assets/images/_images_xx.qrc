@@ -3,5 +3,9 @@
         <file>temp_table_back.png</file>
         <file>player_lvl_full.png</file>
         <file>player_lvl_empty.png</file>
+        <file>flag_go.png</file>
+        <file>flag_left.png</file>
+        <file>flag_right.png</file>
+        <file>flag_stop.png</file>
     </qresource>
 </RCC>

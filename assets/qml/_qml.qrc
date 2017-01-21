@@ -18,5 +18,6 @@
         <file>views/Toast.qml</file>
         <file>views/ImageProgressBar.qml</file>
         <file>screens/AirportScreen.qml</file>
+        <file>screens/FlagController.qml</file>
     </qresource>
 </RCC>

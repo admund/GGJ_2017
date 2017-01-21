@@ -13,6 +13,7 @@ AirportLogic::AirportLogic(QObject* parent)
     : QObject(parent)
     , m_editMode(false)
     , m_airportGrid(new AirportGridModel(this))
+    , m_flagController(new FlagControllerLogic(this))
 {
     init();
 
@@ -65,6 +66,18 @@ void AirportLogic::saveMap()
             stream << strJson << endl;
             qDebug() << "SAVED " << filename;
         }
+    }
+}
+
+void AirportLogic::changeFlag(bool isRight)
+{
+    bool changeTo;
+    if (isRight) {
+        changeTo = !flagController()->planeFlag()->isRightFlagUp();
+        flagController()->planeFlag()->set_isRightFlagUp(changeTo);
+    } else {
+        changeTo = !flagController()->planeFlag()->isLeftFlagUp();
+        flagController()->planeFlag()->set_isLeftFlagUp(changeTo);
     }
 }
 

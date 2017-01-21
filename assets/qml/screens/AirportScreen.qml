@@ -19,7 +19,12 @@ GameScreen {
     GridView {
         id: airportGrid
 
-        anchors.fill: parent
+        anchors {
+            left: parent.left
+            top: parent.top
+            bottom: parent.bottom
+            right: flagController.left
+        }
 
         cellWidth: parent.width / 21
         cellHeight: cellWidth
@@ -36,8 +41,8 @@ GameScreen {
             color: Colors.Red
 
             Rectangle {
-                width: parent.width * .9
-                height: parent.height * .9
+                width: parent.width * .95
+                height: parent.height * .95
 
                 anchors.centerIn: parent
 
@@ -54,6 +59,17 @@ GameScreen {
                 }
             }
         }
+    }
+
+    FlagController {
+        id: flagController
+
+        anchors {
+            bottom: parent.bottom
+            right: parent.right
+        }
+
+        planeFlagModel: airportLogic.flagController.planeFlag
     }
 
     function getTile(tileType) {

@@ -13,12 +13,13 @@ PlaneModel::PlaneModel(QObject* parent)
     , m_isLeftFlagUp(false)
 
     , m_isSelected(false)
-    , m_moveDirection(0)
+    , m_moveDirection(MOVE_STOP)
     , m_moveRotation(0)
 
     , m_speed(0)
     , m_rotation(0)
 
+    , m_isOnGrass(false)
     , m_fuell(0)
     , m_fuellMax(0)
 {
@@ -33,35 +34,71 @@ void PlaneModel::clear()
     set_isLeftFlagUp(false);
 
     set_isAlive(true);
-    set_moveDirection(0);
+    set_moveDirection(MOVE_STOP);
     set_moveRotation(0);
 
+    set_isOnGrass(false);
     set_fuell(0);
     set_fuellMax(0);
 }
 
-// 0 - stop
-// 1 - right
-// 2 - left
-// 3 - go
 #include <QDebug>
-void PlaneModel::changeMoveDirection()
-{
-    if (isRightFlagUp() == isLeftFlagUp()) {
-        if (isRightFlagUp()) {
-            set_moveDirection(3);
-        } else {
-            set_moveDirection(0);
-        }
-    } else {
-        if (isRightFlagUp()) {
-            set_moveDirection(1);
-        } else {
-            set_moveDirection(2);
-        }
-    }
+//void PlaneModel::changeMoveDirection()
+//{
+//    if (isRightFlagUp() == isLeftFlagUp()) {
+//        if (isRightFlagUp()) {
+//            set_moveDirection(MOVE_GO);
+//        } else {
+//            set_moveDirection(MOVE_STOP);
+//        }
+//    } else {
+//        if (isRightFlagUp()) {
+//            set_moveDirection(MOVE_RIGHT);
+//        } else {
+//            set_moveDirection(MOVE_LEFT);
+//        }
+//    }
 
-//    qDebug() << "AirportLogic::changeMoveDirection()" << moveDirection();
+//    //    qDebug() << "AirportLogic::changeMoveDirection()" << moveDirection();
+//}
+
+void PlaneModel::hitBuilding()
+{
+    set_fuell(0);
+}
+
+void PlaneModel::goToSea()
+{
+    set_fuell(0);
+}
+
+void PlaneModel::hitOtherPlane()
+{
+    set_fuell(0);
+}
+
+void PlaneModel::goOnGrass(bool isTrue)
+{
+    set_isOnGrass(isTrue);
+}
+
+void PlaneModel::changeMoveDirection(int moveDirection)
+{
+    set_moveDirection(moveDirection);
+
+    if (moveDirection == MOVE_RIGHT) {
+        set_isLeftFlagUp(false);
+        set_isRightFlagUp(true);
+    } else if (moveDirection == MOVE_LEFT) {
+        set_isLeftFlagUp(true);
+        set_isRightFlagUp(false);
+    } else if (moveDirection == MOVE_GO) {
+        set_isLeftFlagUp(true);
+        set_isRightFlagUp(true);
+    } else {//if (moveDirection == MOVE_STOP) {
+        set_isLeftFlagUp(false);
+        set_isRightFlagUp(false);
+    }
 }
 
 #include <QDebug>
@@ -69,15 +106,15 @@ void PlaneModel::move(int deltaTime)
 {
     Q_UNUSED(deltaTime)
 
-    if (moveDirection() != 0) {
-        if (moveDirection() == 1) {
+    if (moveDirection() != MOVE_STOP) {
+        if (moveDirection() == MOVE_RIGHT) {
             double newRotation = moveRotation() + rotation();
             if (newRotation > 360) {
                 newRotation = newRotation - 360;
             }
             set_moveRotation(newRotation);
 
-        } else if (moveDirection() == 2) {
+        } else if (moveDirection() == MOVE_LEFT) {
             double newRotation = moveRotation() - rotation();
             if (newRotation < 0) {
                 newRotation = newRotation + 360;
@@ -93,7 +130,8 @@ void PlaneModel::move(int deltaTime)
         }
 
         lastFuellSubstraction += deltaTime;
-        if (lastFuellSubstraction > 1000) {
+        if (isOnGrass() && lastFuellSubstraction > 500
+                || lastFuellSubstraction > 1000) {
             set_fuell(fuell() - 1);
             lastFuellSubstraction = 0;
         }

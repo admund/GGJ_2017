@@ -5,12 +5,6 @@
 
 #include "../macros.h"
 
-// TILES_TYPE
-// 0 - grass
-// 1 - road
-// 2 - building
-// 3 - sea
-
 class AirportTileModel : public QObject
 {
     Q_OBJECT
@@ -20,6 +14,11 @@ class AirportTileModel : public QObject
 
 public:
     explicit AirportTileModel(QObject* parent = 0);
+
+    static const int TILE_TYPE_GRASS = 0;
+    static const int TILE_TYPE_ROAD = 1;
+    static const int TILE_TYPE_BUILDING = 2;
+    static const int TILE_TYPE_SEA = 3;
 
     void clear();
 };

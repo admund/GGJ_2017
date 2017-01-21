@@ -10,6 +10,12 @@ ApplicationWindow {
     width: 1280//1366
     height: 720//768
 
+    maximumWidth: width
+    maximumHeight: height
+
+    minimumWidth: width
+    minimumHeight: height
+
     visibility: Window.AutomaticVisibility
     visible: true
 

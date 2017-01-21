@@ -43,4 +43,7 @@ RESOURCES += assets/qml/_qml.qrc \
     assets/images/_images_xx.qrc
 
 DISTFILES += \
-    assets/images/plane_2.png
+    assets/images/plane_2.png \
+    assets/images/flag_panel.png \
+    assets/images/map_london.png \
+    assets/images/panel_objectives.png

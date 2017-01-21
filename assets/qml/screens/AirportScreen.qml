@@ -86,6 +86,7 @@ GameScreen {
 
                 }
 
+
 //                              TODO collider samolotu
 //            Rectangle {
 //                x: plane.x
@@ -102,12 +103,23 @@ GameScreen {
     FlagController {
         id: flagController
 
+        width: 300
+
         anchors {
+            top: parent.top
             bottom: parent.bottom
             right: parent.right
         }
 
         planeModel: airportLogic.flagController.selectedPlane
+
+        onClickFlagPanel: {
+            if (index == 4) {
+                airportLogic.changeSelectedPlane()
+            } else {
+                airportLogic.changeMoveDirection(index)
+            }
+        }
     }
 
     Timer {

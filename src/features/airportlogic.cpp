@@ -81,9 +81,6 @@ void AirportLogic::init()
     flagController()->set_selectedPlane(planeList()->get(selectedPlane()));
 }
 
-bool isInited = false;
-int cellSize = cellSize;
-QList<QRect> gridRects;
 void AirportLogic::setCellSize()
 {
     qDebug() << "void AirportLogic::setCellSize()";
@@ -97,7 +94,6 @@ void AirportLogic::setCellSize()
             for (int i=0; i<17; i++) {
                 QRect grid(i * cellSize, j * cellSize, cellSize, cellSize);
                 gridRects.append(grid);
-//                qDebug() << grid.top() << grid.left() << grid.bottom() << grid.right();
             }
         }
     }
@@ -112,6 +108,8 @@ void AirportLogic::checkCollisions()
 
     for (int i=0; i<planeList()->size(); i++) {
         PlaneModel* plane = planeList()->get(i);
+        plane->goOnGrass(false);
+
         QRect planeRect(plane->posX(), plane->posY(), 30, 30);
 
         for (int j=0; j<gridRects.size(); j++) {
@@ -119,6 +117,26 @@ void AirportLogic::checkCollisions()
             bool intersect = gridRects.at(j).intersects(planeRect);
             if (intersect) {
                 airportGrid()->get(j)->set_touchedBy(QString::number(plane->id()));
+
+                int tileType = airportGrid()->get(j)->tileType();
+                if (tileType == AirportTileModel::TILE_TYPE_GRASS) {
+                    plane->goOnGrass(true);
+                } else if (tileType == AirportTileModel::TILE_TYPE_BUILDING) {
+                    plane->hitBuilding();
+                } else if (tileType == AirportTileModel::TILE_TYPE_SEA) {
+                    plane->goToSea();
+                }
+            }
+        }
+
+        for (int j=0; j<planeList()->size(); j++) {
+            PlaneModel* planeSec = planeList()->get(j);
+            if (plane != planeSec) {
+                QRect planeSecRect(planeSec->posX(), planeSec->posY(), 30, 30);
+                if (planeSecRect.intersects(planeRect)) {
+                    plane->hitOtherPlane();
+                    planeSec->hitOtherPlane();
+                }
             }
         }
     }
@@ -150,18 +168,9 @@ void AirportLogic::saveMap()
     }
 }
 
-void AirportLogic::changeFlag(bool isRight)
+void AirportLogic::changeMoveDirection(int moveDirection)
 {
-//    qDebug() << "AirportLogic::changeFlag()" << isRight;
-    if (isRight) {
-        bool changeTo = !planeList()->get(selectedPlane())->isRightFlagUp();
-        planeList()->get(selectedPlane())->set_isRightFlagUp(changeTo);
-    } else {
-        bool changeTo = !planeList()->get(selectedPlane())->isLeftFlagUp();
-        planeList()->get(selectedPlane())->set_isLeftFlagUp(changeTo);
-    }
-
-    planeList()->get(selectedPlane())->changeMoveDirection();
+    planeList()->get(selectedPlane())->changeMoveDirection(moveDirection);
 }
 
 void AirportLogic::changeSelectedPlane()

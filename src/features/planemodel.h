@@ -25,19 +25,27 @@ class PlaneModel : public QObject
     AUTO_Q_PROPERTY(double, speed)
     AUTO_Q_PROPERTY(double, rotation)
 
+    AUTO_Q_PROPERTY(bool, isOnGrass)
     AUTO_Q_PROPERTY(int, fuell)
     AUTO_Q_PROPERTY(int, fuellMax)
 
 public:
     explicit PlaneModel(QObject* parent = 0);
 
+    static const int MOVE_RIGHT = 0;
+    static const int MOVE_LEFT = 1;
+    static const int MOVE_GO = 2;
+    static const int MOVE_STOP = 3;
+
     void clear();
 
-    void changeMoveDirection();
+    void changeMoveDirection(int moveDirection);
+    void hitBuilding();
+    void goToSea();
+    void hitOtherPlane();
+    void goOnGrass(bool isTrue);
 
     Q_INVOKABLE void move(int deltaTime);
-
-
 
 private:
     int lastFuellSubstraction = 0;

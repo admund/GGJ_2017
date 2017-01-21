@@ -23,11 +23,16 @@ public:
 
     Q_INVOKABLE void setCellSize();
     Q_INVOKABLE void checkCollisions();
+    Q_INVOKABLE void changeMoveDirection(int moveDirection);
+    Q_INVOKABLE void changeSelectedPlane();
 
     void init(); // TODO add some JSON path
     void saveMap();
-    void changeFlag(bool isRight);
-    void changeSelectedPlane();
+
+private:
+    bool isInited = false;
+    int cellSize = 0;
+    QList<QRect> gridRects;
 };
 
 #endif // AIRPORTLOGIC_H

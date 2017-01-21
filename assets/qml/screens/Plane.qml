@@ -34,7 +34,7 @@ Rectangle {
 
         radius: 3
 
-        visible: mouseForHover.containsMouse
+//        visible: mouseForHover.containsMouse TODO
 
         anchors {
             horizontalCenter: plane.horizontalCenter
@@ -65,7 +65,7 @@ Rectangle {
     Timer {
         interval: deltaTime
         repeat: true
-        running: planModel.isAlive
+        running: planModel.fuell > 0
 
         onTriggered: planModel.move(deltaTime)
     }

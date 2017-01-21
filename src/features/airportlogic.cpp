@@ -16,6 +16,7 @@ AirportLogic::AirportLogic(QObject* parent)
     , m_airportGrid(new AirportGridModel(this))
     , m_planeList(new PlaneListModel(this))
     , m_flagController(new FlagControllerLogic(this))
+    , m_score(new ScoreModel(this))
 {
 }
 
@@ -30,6 +31,8 @@ void getStringFromFile(const QString& fileName, QString& data) {
 void AirportLogic::init()
 {
     qDebug() << "void AirportLogic::init()";
+
+    qsrand(QDateTime::currentMSecsSinceEpoch());
 
     QString levelData("");
     const QString fileNameLevel(("E:\\Projekty\\ggj2017\\UNNAMED\\level_") + QString::number(1) + QString(".json"));
@@ -49,38 +52,58 @@ void AirportLogic::init()
         }
     }
 
-    QString planesData("");
-    const QString fileNamePlanes(("E:\\Projekty\\ggj2017\\UNNAMED\\planes_level_") + QString::number(1) + QString(".json"));
-    getStringFromFile(fileNamePlanes, planesData);
+    QString spawnsData("");
+    const QString fileNameSpawns(("E:\\Projekty\\ggj2017\\UNNAMED\\spawns_level_") + QString::number(1) + QString(".json"));
+    getStringFromFile(fileNameSpawns, spawnsData);
 
-    QJsonObject planesObj;
-    if (JsonHelpers::jsonObjectFromString(planesData, planesObj)) {
-        QJsonArray planes = planesObj["planes"].toArray();
-//        qDebug() << "planes" << planes.size();
-        for (int i=0; i<planes.size(); i++) {
-            QJsonObject planeJson = planes.at(i).toObject();
+    QJsonObject spawnsObj;
+    if (JsonHelpers::jsonObjectFromString(spawnsData, spawnsObj)) {
+        QJsonArray spawns = spawnsObj["spawns"].toArray();
+        qDebug() << "spawns" << spawns.size();
+        for (int i=0; i<spawns.size(); i++) {
+            QJsonObject spawnJson = spawns.at(i).toObject();
 
-            PlaneModel* planeModel = new PlaneModel(this);
-            planeModel->set_id(planeJson["plane_id"].toInt());
-            planeModel->set_posX(planeJson["start_pos_x"].toInt());//200 + 100 * i);
-            planeModel->set_posY(planeJson["start_pos_y"].toInt());//200 + 50 * i);
+            SpawnPointModel* spawnPointModel = new SpawnPointModel(this);
+            spawnPointModel->set_posX(spawnJson["pos_x"].toInt());
+            spawnPointModel->set_posY(spawnJson["pos_y"].toInt());
+            spawnPointModel->set_moveRotation(spawnJson["move_rotation"].toInt());
 
-            planeModel->set_speed(planeJson["speed"].toDouble());
-            planeModel->set_rotation(planeJson["rotation"].toDouble());
-
-            planeModel->set_fuell(qrand() % planeJson["max_fuell"].toInt());
-            planeModel->set_fuellMax(planeJson["max_fuell"].toInt());
-
-            planeList()->addPlaneModel(planeModel);
-
-            connect(planeModel, SIGNAL(planeDestroyed(int)), this, SLOT(onPlaneDestroyed(int)));
+            spawnList.append(spawnPointModel);
         }
     }
 
-    if (planeList()->size() > 0) {
-        set_selectedPlane(0);
-        flagController()->set_selectedPlane(planeList()->get(selectedPlane()));
-    }
+//    QString planesData("");
+//    const QString fileNamePlanes(("E:\\Projekty\\ggj2017\\UNNAMED\\planes_level_") + QString::number(1) + QString(".json"));
+//    getStringFromFile(fileNamePlanes, planesData);
+
+//    QJsonObject planesObj;
+//    if (JsonHelpers::jsonObjectFromString(planesData, planesObj)) {
+//        QJsonArray planes = planesObj["planes"].toArray();
+////        qDebug() << "planes" << planes.size();
+//        for (int i=0; i<planes.size(); i++) {
+//            QJsonObject planeJson = planes.at(i).toObject();
+
+//            PlaneModel* planeModel = new PlaneModel(this);
+//            planeModel->set_id(planeJson["plane_id"].toInt());
+//            planeModel->set_posX(planeJson["start_pos_x"].toInt());//200 + 100 * i);
+//            planeModel->set_posY(planeJson["start_pos_y"].toInt());//200 + 50 * i);
+
+//            planeModel->set_speed(planeJson["speed"].toDouble());
+//            planeModel->set_rotation(planeJson["rotation"].toDouble());
+
+//            planeModel->set_fuell(qrand() % planeJson["max_fuell"].toInt());
+//            planeModel->set_fuellMax(planeJson["max_fuell"].toInt());
+
+//            planeList()->addPlaneModel(planeModel);
+
+//            connect(planeModel, SIGNAL(planeDestroyed(int)), this, SLOT(onPlaneDestroyed(int)));
+//        }
+//    }
+
+//    if (planeList()->size() > 0) {
+//        set_selectedPlane(0);
+//        flagController()->set_selectedPlane(planeList()->get(selectedPlane()));
+//    }
 }
 
 void AirportLogic::setCellSize()
@@ -128,6 +151,10 @@ void AirportLogic::checkCollisions()
                     plane->hitBuilding();
                 } else if (tileType == AirportTileModel::TILE_TYPE_SEA) {
                     plane->goToSea();
+                } else if (tileType == AirportTileModel::TILE_TYPE_RUNWAY_START) {
+                    plane->goToRunwayStart();
+                } else if (tileType == AirportTileModel::TILE_TYPE_RAMP) {
+                    plane->goToRamp();
                 }
             }
         }
@@ -147,6 +174,37 @@ void AirportLogic::checkCollisions()
             }
         }
     }
+}
+
+int cnt = 0;
+void AirportLogic::spawn()
+{
+    qDebug() << "void AirportLogic::spawn()";
+
+    int spawnItem = qrand() % spawnList.size();
+    SpawnPointModel* spawnPoint = spawnList.at(spawnItem);
+
+    PlaneModel* planeModel = new PlaneModel(this);
+    planeModel->set_id(cnt);
+    planeModel->set_posX(spawnPoint->posX());
+    planeModel->set_posY(spawnPoint->posY());
+    planeModel->set_moveRotation(spawnPoint->moveRotation());
+    planeModel->set_moveDirection(PlaneModel::MOVE_GO);
+
+    planeModel->set_speed(.5); // TODO
+    planeModel->set_rotation(.5); // TODO
+
+    planeModel->set_fuell(10 + qrand() % 90); // TODO
+    planeModel->set_fuellMax(10 + 90); // TODO
+
+    planeList()->addPlaneModel(planeModel);
+
+    connect(planeModel, SIGNAL(planeDestroyed(int)), this, SLOT(onPlaneDestroyed(int)));
+    connect(planeModel, SIGNAL(checkPlaneControll(int)), this, SLOT(onCheckPlaneControll(int)));
+    connect(planeModel, SIGNAL(planeGoAway()), score(), SLOT(onPlaneGoAway()));
+    connect(planeModel, SIGNAL(planeDestroyed(int)), score(), SLOT(onPlaneDestroyed(int)));
+
+    cnt++;
 }
 
 void AirportLogic::saveMap()
@@ -181,6 +239,15 @@ void AirportLogic::onPlaneDestroyed(int planeId)
     }
 }
 
+void AirportLogic::onCheckPlaneControll(int planeId)
+{
+    qDebug() << "void AirportLogic::onCheckPlaneControll(int planeId)" << planeId;
+    qDebug() << "selectedPlane()" << selectedPlane();
+    if (selectedPlane() == -1 || selectedPlane() == planeId) {
+        changeSelectedPlane();
+    }
+}
+
 void AirportLogic::changeMoveDirection(int moveDirection)
 {
     if (selectedPlane() != -1) {
@@ -198,8 +265,8 @@ void AirportLogic::changeSelectedPlane()
         set_selectedPlane(0);
     }
 
-    while (maxCnt > 0 && !planeList()->get(selectedPlane())->canBeControlled()
-           && !planeList()->get(selectedPlane())->isAlive())
+    while (maxCnt > 0 && (!planeList()->get(selectedPlane())->canBeControlled()
+           || !planeList()->get(selectedPlane())->isAlive()))
     {
         set_selectedPlane(selectedPlane() + 1);
         if (selectedPlane() >= planeList()->size()) {

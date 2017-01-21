@@ -15,6 +15,8 @@ class PlaneModel : public QObject
     AUTO_Q_PROPERTY(float, posY)
     AUTO_Q_PROPERTY(bool, isAlive)
     AUTO_Q_PROPERTY(bool, canBeControlled)
+    AUTO_Q_PROPERTY(bool, isUnload)
+    AUTO_Q_PROPERTY(bool, isScored)
 
     AUTO_Q_PROPERTY(bool, isRightFlagUp)
     AUTO_Q_PROPERTY(bool, isLeftFlagUp)
@@ -43,13 +45,17 @@ public:
     void changeMoveDirection(int moveDirection);
     void hitBuilding();
     void goToSea();
+    void goToRunwayStart();
+    void goToRamp();
     void hitOtherPlane();
     void goOnGrass(bool isTrue);
 
     Q_INVOKABLE void move(int deltaTime);
 
 signals:
-    void planeDestroyed(int playerId);
+    void planeDestroyed(int planeId);
+    void planeGoAway();
+    void checkPlaneControll(int planeId);
 
 private:
     int lastFuellSubstraction = 0;

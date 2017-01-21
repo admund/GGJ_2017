@@ -67,7 +67,7 @@ GameScreen {
 
                 onClicked: {
                     if (airportLogic.editMode) {
-                        airportGridModelRole.tileType = (airportGridModelRole.tileType + 1) % 4
+                        airportGridModelRole.tileType = (airportGridModelRole.tileType + 1) % 6
                     }
                 }
             }
@@ -85,7 +85,6 @@ GameScreen {
                 isSelected: airportLogic.selectedPlane === index
 
                 }
-
 
 //                              TODO collider samolotu
 //            Rectangle {
@@ -122,6 +121,26 @@ GameScreen {
         }
     }
 
+    OpenSansText {
+        id: goodScore
+
+        width: 100
+        height: 10
+
+        text: "Good Score: " + airportLogic.score.goodScore
+    }
+
+    OpenSansText {
+        id: badScore
+
+        width: 100
+        height: 10
+
+        anchors.top: goodScore.bottom
+
+        text: "Bad Score: " + airportLogic.score.badScore
+    }
+
     Timer {
         interval: 100
         repeat: true
@@ -132,6 +151,17 @@ GameScreen {
         }
     }
 
+    Timer {
+        id: spawnTimer
+        interval: 0//20000
+        repeat: false//true
+        running: true
+
+        onTriggered: {
+            airportLogic.spawn()
+        }
+    }
+
     function getTile(tileType) {
         if (tileType === 1) {
             return Colors.Gray
@@ -139,6 +169,10 @@ GameScreen {
             return Colors.White
         } else if (tileType === 3) {
             return Colors.Blue
+        } else if (tileType === 4) {
+            return Colors.Yellow
+        } else if (tileType === 5) {
+            return Colors.Red
         } else {
             return Colors.DarkGreen;
         }

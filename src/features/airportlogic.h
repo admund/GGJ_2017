@@ -6,6 +6,8 @@
 #include "airportgridmodel.h"
 #include "flagcontrollerlogic.h"
 #include "planelistmodel.h"
+#include "spawnpointmodel.h"
+#include "scoremodel.h"
 #include "../macros.h"
 
 class AirportLogic : public QObject
@@ -17,6 +19,7 @@ class AirportLogic : public QObject
     AUTO_Q_PROPERTY(AirportGridModel*, airportGrid)
     AUTO_Q_PROPERTY(PlaneListModel*, planeList)
     AUTO_Q_PROPERTY(FlagControllerLogic*, flagController)
+    AUTO_Q_PROPERTY(ScoreModel*, score)
 
 public:
     explicit AirportLogic(QObject* parent = 0);
@@ -25,17 +28,20 @@ public:
     Q_INVOKABLE void checkCollisions();
     Q_INVOKABLE void changeMoveDirection(int moveDirection);
     Q_INVOKABLE void changeSelectedPlane();
+    Q_INVOKABLE void spawn();
 
     void init(); // TODO add some JSON path
     void saveMap();
 
 private slots:
     void onPlaneDestroyed(int planeId);
+    void onCheckPlaneControll(int planeId);
 
 private:
     bool isInited = false;
     int cellSize = 0;
     QList<QRect> gridRects;
+    QList<SpawnPointModel*> spawnList;
 };
 
 #endif // AIRPORTLOGIC_H

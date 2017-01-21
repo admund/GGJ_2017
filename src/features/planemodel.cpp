@@ -9,6 +9,8 @@ PlaneModel::PlaneModel(QObject* parent)
     , m_posY(0)
     , m_isAlive(true)
     , m_canBeControlled(false)
+    , m_isUnload(false)
+    , m_isScored(false)
 
     , m_isRightFlagUp(false)
     , m_isLeftFlagUp(false)
@@ -35,6 +37,8 @@ void PlaneModel::clear()
     set_isLeftFlagUp(false);
     set_isAlive(true);
     set_canBeControlled(false);
+    set_isUnload(false);
+    set_isScored(false);
 
     set_moveDirection(MOVE_STOP);
     set_moveRotation(0);
@@ -61,6 +65,34 @@ void PlaneModel::goToSea()
 //    qDebug() << "goToSea planeDestroyed";
     emit planeDestroyed(id());
 }
+
+void PlaneModel::goToRunwayStart()
+{
+    qDebug() << "void PlaneModel::goToRunwayStart()";
+    qDebug() << "canBeControlled()" << canBeControlled();
+    if (!canBeControlled() && !isUnload()) {
+        set_canBeControlled(true);
+        emit checkPlaneControll(id());
+    } else {
+        qDebug() << "isUnload()" << isUnload();
+        if (isUnload() && !isScored()) {
+            set_canBeControlled(false);
+            set_moveDirection(MOVE_GO);
+            emit checkPlaneControll(id());
+
+            set_isScored(true);
+            emit planeGoAway();
+        }
+    }
+}
+
+void PlaneModel::goToRamp() {
+    qDebug() << "void PlaneModel::goToRamp()";
+
+    set_isUnload(true);
+    set_fuell(fuellMax());
+}
+
 
 void PlaneModel::hitOtherPlane()
 {
@@ -134,14 +166,18 @@ void PlaneModel::move(int deltaTime)
             set_fuell(0);
             set_isAlive(false);
 //            qDebug() << "posX() < -200 || posX() > 1500 planeDestroyed";
-            emit planeDestroyed(id());
+            if (!isScored()) {
+                emit planeDestroyed(id());
+            }
         }
 
         if (posY() < -200 || posY() > 1000) {
             set_fuell(0);
             set_isAlive(false);
 //            qDebug() << "(posY() < -200 || posY() > 1000) planeDestroyed";
-            emit planeDestroyed(id());
+            if (!isScored()) {
+                emit planeDestroyed(id());
+            }
         }
     }
 }

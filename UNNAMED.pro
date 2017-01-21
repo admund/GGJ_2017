@@ -17,7 +17,9 @@ HEADERS += \
     src/features/flagcontrollerlogic.h \
     src/features/planeflagmodel.h \
     src/features/planemodel.h \
-    src/features/planelistmodel.h
+    src/features/planelistmodel.h \
+    src/features/spawnpointmodel.h \
+    src/features/scoremodel.h
 
 
 SOURCES += src/main.cpp \
@@ -32,7 +34,9 @@ SOURCES += src/main.cpp \
     src/features/flagcontrollerlogic.cpp \
     src/features/planeflagmodel.cpp \
     src/features/planemodel.cpp \
-    src/features/planelistmodel.cpp
+    src/features/planelistmodel.cpp \
+    src/features/spawnpointmodel.cpp \
+    src/features/scoremodel.cpp
 
 
 RESOURCES += assets/qml/_qml.qrc \

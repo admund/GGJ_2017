@@ -19,6 +19,8 @@ public:
     static const int TILE_TYPE_ROAD = 1;
     static const int TILE_TYPE_BUILDING = 2;
     static const int TILE_TYPE_SEA = 3;
+    static const int TILE_TYPE_RUNWAY_START = 4;
+    static const int TILE_TYPE_RAMP = 5;
 
     void clear();
 };

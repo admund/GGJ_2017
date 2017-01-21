@@ -26,6 +26,8 @@ UnNamedApplication::UnNamedApplication(int& argc, char** argv)
 
     mSpinacz->init();
 
+    installEventFilter(mSpinacz);
+
     showQml();
 }
 
@@ -39,6 +41,8 @@ void UnNamedApplication::registerAllQmlModelTypes() const
 {
     // All model classes exposed to QML must be registered here
 //    QML_REGISTER_UNCREATABLE_TYPE(CardModel)
+    QML_REGISTER_UNCREATABLE_TYPE(AirportTileModel)
+
 }
 
 void UnNamedApplication::registerAllMetaTypes() const

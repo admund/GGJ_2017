@@ -16,6 +16,8 @@ public:
 
     void init();
 
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 private:
     void initData(bool useLocalServer = false);
 

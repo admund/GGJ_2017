@@ -1,5 +1,8 @@
 #include "spinacz.h"
 
+#include <QEvent>
+#include <QKeyEvent>
+
 Spinacz::Spinacz(QObject* parent)
     : QObject(parent)
     , m_root(new RootLogic(this))
@@ -18,8 +21,27 @@ void Spinacz::init()
     initData();
 }
 
+#include <QDebug>
+bool Spinacz::eventFilter(QObject *watched, QEvent *event)
+{
+    Q_UNUSED(watched);
+
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+        if (keyEvent->key() == Qt::Key_F12) {
+            root()->airportLogic()->saveMap();
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
 void Spinacz::initData(bool useLocalServer)
 {
+    Q_UNUSED(useLocalServer)
 //    mDataSource->init(useLocalServer);
 }
 

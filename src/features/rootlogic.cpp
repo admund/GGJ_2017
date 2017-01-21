@@ -2,11 +2,7 @@
 
 RootLogic::RootLogic(QObject* parent)
     : QObject(parent)
-//    , m_matching(new MatchingLogic(this))
-//    , m_dialogs(new DialogsLogic(this))
-//    , m_login(new LoginLogic(this))
-//    , m_table(new TableLogic(this))
-//    , m_skills(new SkillsLogic(this))
+    , m_airportLogic(new AirportLogic(this))
 {
 #ifdef QT_DEBUG
     m_isDebugModeOn = true;

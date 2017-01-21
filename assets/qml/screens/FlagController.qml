@@ -3,7 +3,7 @@ import QtQuick 2.0
 import "../views/Colors.js" as Colors
 
 Rectangle {
-    width: 200
+    width: 300
     height: 300
 
     property QtObject planeModel

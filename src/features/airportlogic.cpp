@@ -19,21 +19,27 @@ AirportLogic::AirportLogic(QObject* parent)
 {
 }
 
+void getStringFromFile(const QString& fileName, QString& data) {
+    QString filename(fileName);
+    QFile file(filename);
+    file.open(QFile::ReadOnly);
+    data = QString(file.readAll());
+}
+
 #include <QDebug>
 int planeCnt = 0;
 void AirportLogic::init()
 {
     qDebug() << "void AirportLogic::init()";
 
-    QString filename(QString("E:\\Projekty\\ggj2017\\UNNAMED\\level_") + QString::number(1) + QString(".json"));
-    QFile file(filename);
-    file.open(QFile::ReadOnly);
-    QString data(file.readAll());
+    QString levelData("");
+    const QString fileNameLevel(("E:\\Projekty\\ggj2017\\UNNAMED\\level_") + QString::number(1) + QString(".json"));
+    getStringFromFile(fileNameLevel, levelData);
 
-    QJsonObject obj;
-    if (JsonHelpers::jsonObjectFromString(data, obj)) {
-        QJsonArray grid = obj["grid"].toArray();
-
+    QJsonObject gridObj;
+    if (JsonHelpers::jsonObjectFromString(levelData, gridObj)) {
+        QJsonArray grid = gridObj["grid"].toArray();
+//        qDebug() << "grid" << grid.size();
         for (int i=0; i<grid.size(); i++) {
             QJsonObject tile = grid.at(i).toObject();
 
@@ -44,18 +50,32 @@ void AirportLogic::init()
         }
     }
 
-    for (int i=0; i<3; i++) {
-        PlaneModel* planeModel = new PlaneModel(this);
-        planeModel->set_id(planeCnt);
-        planeModel->set_posX(200 + 100 * i);
-        planeModel->set_posY(200 + 50 * i);
+    QString planesData("");
+    const QString fileNamePlanes(("E:\\Projekty\\ggj2017\\UNNAMED\\planes_level_") + QString::number(1) + QString(".json"));
+    getStringFromFile(fileNamePlanes, planesData);
 
-        planeModel->set_fuell(qrand() % 100);
-        planeModel->set_fuellMax(100);
+    QJsonObject planesObj;
+    if (JsonHelpers::jsonObjectFromString(planesData, planesObj)) {
+        QJsonArray planes = planesObj["planes"].toArray();
+//        qDebug() << "planes" << planes.size();
+        for (int i=0; i<planes.size(); i++) {
+            QJsonObject planeJson = planes.at(i).toObject();
 
-        planeList()->addPlaneModel(planeModel);
+            PlaneModel* planeModel = new PlaneModel(this);
+            planeModel->set_id(planeJson["plane_id"].toInt());
+            planeModel->set_posX(planeJson["start_pos_x"].toInt());//200 + 100 * i);
+            planeModel->set_posY(planeJson["start_pos_y"].toInt());//200 + 50 * i);
 
-        planeCnt++;
+            planeModel->set_speed(planeJson["speed"].toDouble());
+            planeModel->set_rotation(planeJson["rotation"].toDouble());
+
+            planeModel->set_fuell(qrand() % planeJson["max_fuell"].toInt());
+            planeModel->set_fuellMax(planeJson["max_fuell"].toInt());
+
+            planeList()->addPlaneModel(planeModel);
+
+            planeCnt++;
+        }
     }
 
     flagController()->set_selectedPlane(planeList()->get(selectedPlane()));
@@ -64,15 +84,14 @@ void AirportLogic::init()
 bool isInited = false;
 int cellSize = cellSize;
 QList<QRect> gridRects;
-void AirportLogic::setCellSize(int cellSize_)
+void AirportLogic::setCellSize()
 {
-    qDebug() << "void AirportLogic::setCellSize(int cellSize)" << cellSize_;
+    qDebug() << "void AirportLogic::setCellSize()";
 
     if (!isInited) {
         init();
         isInited = true;
-//        cellSize = cellSize_;
-        cellSize = 63;
+        cellSize = (1280 - 300) / 17;
 
         for (int j=0; j<12; j++) {
             for (int i=0; i<17; i++) {

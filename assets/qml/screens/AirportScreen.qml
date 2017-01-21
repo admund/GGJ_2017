@@ -30,7 +30,7 @@ GameScreen {
         cellHeight: cellWidth
 
         Component.onCompleted: {
-            airportLogic.setCellSize(cellWidth)
+            airportLogic.setCellSize()
         }
 
         interactive: false
@@ -86,6 +86,7 @@ GameScreen {
 
                 }
 
+//                              TODO collider samolotu
 //            Rectangle {
 //                x: plane.x
 //                y: plane.y

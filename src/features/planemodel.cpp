@@ -16,6 +16,9 @@ PlaneModel::PlaneModel(QObject* parent)
     , m_moveDirection(0)
     , m_moveRotation(0)
 
+    , m_speed(0)
+    , m_rotation(0)
+
     , m_fuell(0)
     , m_fuellMax(0)
 {
@@ -67,18 +70,24 @@ void PlaneModel::move(int deltaTime)
     Q_UNUSED(deltaTime)
 
     if (moveDirection() != 0) {
-        int rotationSpeed = 1;
         if (moveDirection() == 1) {
-            set_moveRotation((moveRotation() + rotationSpeed) % 360);
+            double newRotation = moveRotation() + rotation();
+            if (newRotation > 360) {
+                newRotation = newRotation - 360;
+            }
+            set_moveRotation(newRotation);
 
         } else if (moveDirection() == 2) {
-            set_moveRotation(((moveRotation() - rotationSpeed) + 360) % 360);
+            double newRotation = moveRotation() - rotation();
+            if (newRotation < 0) {
+                newRotation = newRotation + 360;
+            }
+            set_moveRotation(newRotation);
 
         } else {
-            float velocity = .6;
             double moveRotationInRadians = qDegreesToRadians((float)moveRotation());
-            float newPosX = velocity * qCos(moveRotationInRadians);
-            float newPosY = velocity * qSin(moveRotationInRadians);
+            float newPosX = speed() * qCos(moveRotationInRadians);
+            float newPosY = speed() * qSin(moveRotationInRadians);
             set_posX(posX() + newPosX);
             set_posY(posY() + newPosY);
         }

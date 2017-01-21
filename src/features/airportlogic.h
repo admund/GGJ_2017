@@ -21,7 +21,7 @@ class AirportLogic : public QObject
 public:
     explicit AirportLogic(QObject* parent = 0);
 
-    Q_INVOKABLE void setCellSize(int cellSize);
+    Q_INVOKABLE void setCellSize();
     Q_INVOKABLE void checkCollisions();
 
     void init(); // TODO add some JSON path

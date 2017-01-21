@@ -20,7 +20,10 @@ class PlaneModel : public QObject
 
     AUTO_Q_PROPERTY(bool, isSelected)
     AUTO_Q_PROPERTY(int, moveDirection)
-    AUTO_Q_PROPERTY(int, moveRotation)
+    AUTO_Q_PROPERTY(double, moveRotation)
+
+    AUTO_Q_PROPERTY(double, speed)
+    AUTO_Q_PROPERTY(double, rotation)
 
     AUTO_Q_PROPERTY(int, fuell)
     AUTO_Q_PROPERTY(int, fuellMax)
@@ -33,6 +36,8 @@ public:
     void changeMoveDirection();
 
     Q_INVOKABLE void move(int deltaTime);
+
+
 
 private:
     int lastFuellSubstraction = 0;

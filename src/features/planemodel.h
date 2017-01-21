@@ -11,9 +11,10 @@ class PlaneModel : public QObject
 
     AUTO_Q_PROPERTY(int, id)
 
-    AUTO_Q_PROPERTY(bool, isAlive)
     AUTO_Q_PROPERTY(float, posX)
     AUTO_Q_PROPERTY(float, posY)
+    AUTO_Q_PROPERTY(bool, isAlive)
+    AUTO_Q_PROPERTY(bool, canBeControlled)
 
     AUTO_Q_PROPERTY(bool, isRightFlagUp)
     AUTO_Q_PROPERTY(bool, isLeftFlagUp)

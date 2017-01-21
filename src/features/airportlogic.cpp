@@ -12,7 +12,7 @@
 AirportLogic::AirportLogic(QObject* parent)
     : QObject(parent)
     , m_editMode(false)
-    , m_selectedPlane(0)
+    , m_selectedPlane(-1)
     , m_airportGrid(new AirportGridModel(this))
     , m_planeList(new PlaneListModel(this))
     , m_flagController(new FlagControllerLogic(this))
@@ -27,7 +27,6 @@ void getStringFromFile(const QString& fileName, QString& data) {
 }
 
 #include <QDebug>
-int planeCnt = 0;
 void AirportLogic::init()
 {
     qDebug() << "void AirportLogic::init()";
@@ -74,19 +73,18 @@ void AirportLogic::init()
 
             planeList()->addPlaneModel(planeModel);
 
-            planeCnt++;
-
             connect(planeModel, SIGNAL(planeDestroyed(int)), this, SLOT(onPlaneDestroyed(int)));
         }
     }
 
-    flagController()->set_selectedPlane(planeList()->get(selectedPlane()));
+    if (planeList()->size() > 0) {
+        set_selectedPlane(0);
+        flagController()->set_selectedPlane(planeList()->get(selectedPlane()));
+    }
 }
 
 void AirportLogic::setCellSize()
 {
-    qDebug() << "void AirportLogic::setCellSize()";
-
     if (!isInited) {
         init();
         isInited = true;
@@ -110,6 +108,9 @@ void AirportLogic::checkCollisions()
 
     for (int i=0; i<planeList()->size(); i++) {
         PlaneModel* plane = planeList()->get(i);
+        if (!plane->isAlive()) {
+            continue;
+        }
         plane->goOnGrass(false);
 
         QRect planeRect(plane->posX(), plane->posY(), 30, 30);
@@ -133,11 +134,15 @@ void AirportLogic::checkCollisions()
 
         for (int j=0; j<planeList()->size(); j++) {
             PlaneModel* planeSec = planeList()->get(j);
-            if (plane != planeSec) {
+            if (plane != planeSec && (plane->isAlive() || planeSec->isAlive())) {
                 QRect planeSecRect(planeSec->posX(), planeSec->posY(), 30, 30);
                 if (planeSecRect.intersects(planeRect)) {
-                    plane->hitOtherPlane();
-                    planeSec->hitOtherPlane();
+                    if (plane->isAlive()) {
+                        plane->hitOtherPlane();
+                    }
+                    if (planeSec->isAlive()) {
+                        planeSec->hitOtherPlane();
+                    }
                 }
             }
         }
@@ -147,7 +152,6 @@ void AirportLogic::checkCollisions()
 void AirportLogic::saveMap()
 {
     if (editMode()) {
-        qDebug() << "saveMap";
         QJsonObject obj;
         QJsonArray tileArray;
         for (int i=0; i<airportGrid()->size(); i++) {
@@ -165,33 +169,49 @@ void AirportLogic::saveMap()
         if (file.open(QIODevice::ReadWrite)) {
             QTextStream stream(&file);
             stream << strJson << endl;
-            qDebug() << "SAVED " << filename;
         }
     }
 }
 
 void AirportLogic::onPlaneDestroyed(int planeId)
 {
-    qDebug() << "AirportLogic::onPlaneDestroyed(int planeId)" << planeId;
-    if (planeList()->get(selectedPlane())->id() == planeId) {
+//    qDebug() << "void AirportLogic::onPlaneDestroyed(int planeId)" << planeId;
+    if (selectedPlane() == -1 || planeList()->get(selectedPlane())->id() == planeId) {
         changeSelectedPlane();
     }
 }
 
 void AirportLogic::changeMoveDirection(int moveDirection)
 {
-    planeList()->get(selectedPlane())->changeMoveDirection(moveDirection);
+    if (selectedPlane() != -1) {
+        planeList()->get(selectedPlane())->changeMoveDirection(moveDirection);
+    }
 }
 
 void AirportLogic::changeSelectedPlane()
 {
-//    qDebug() << "AirportLogic::changeSelectedPlane()";
+    int maxCnt = planeList()->size();
+//    qDebug() << "AirportLogic::changeSelectedPlane()" << maxCnt;
+
     set_selectedPlane(selectedPlane() + 1);
     if (selectedPlane() >= planeList()->size()) {
         set_selectedPlane(0);
     }
 
-    flagController()->set_selectedPlane(planeList()->get(selectedPlane()));
+    while (maxCnt > 0 && !planeList()->get(selectedPlane())->canBeControlled()
+           && !planeList()->get(selectedPlane())->isAlive())
+    {
+        set_selectedPlane(selectedPlane() + 1);
+        if (selectedPlane() >= planeList()->size()) {
+            set_selectedPlane(0);
+        }
+        maxCnt--;
+    }
 
-//    qDebug() << "selectedPlane" << selectedPlane();
+    if (maxCnt > 0) {
+        flagController()->set_selectedPlane(planeList()->get(selectedPlane()));
+    } else {
+        flagController()->set_selectedPlane(nullptr);
+        set_selectedPlane(-1);
+    }
 }

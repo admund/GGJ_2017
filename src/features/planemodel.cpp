@@ -8,6 +8,7 @@ PlaneModel::PlaneModel(QObject* parent)
     , m_posX(0)
     , m_posY(0)
     , m_isAlive(true)
+    , m_canBeControlled(false)
 
     , m_isRightFlagUp(false)
     , m_isLeftFlagUp(false)
@@ -32,8 +33,9 @@ void PlaneModel::clear()
 
     set_isRightFlagUp(false);
     set_isLeftFlagUp(false);
-
     set_isAlive(true);
+    set_canBeControlled(false);
+
     set_moveDirection(MOVE_STOP);
     set_moveRotation(0);
 
@@ -46,18 +48,25 @@ void PlaneModel::clear()
 void PlaneModel::hitBuilding()
 {
     set_fuell(0);
+    set_isAlive(false);
+
+//    qDebug() << "hitBuilding planeDestroyed";
     emit planeDestroyed(id());
 }
 
 void PlaneModel::goToSea()
 {
     set_fuell(0);
+    set_isAlive(false);
+//    qDebug() << "goToSea planeDestroyed";
     emit planeDestroyed(id());
 }
 
 void PlaneModel::hitOtherPlane()
 {
     set_fuell(0);
+    set_isAlive(false);
+//    qDebug() << "hitOtherPlane planeDestroyed";
     emit planeDestroyed(id());
 }
 
@@ -79,7 +88,7 @@ void PlaneModel::changeMoveDirection(int moveDirection)
     } else if (moveDirection == MOVE_GO) {
         set_isLeftFlagUp(true);
         set_isRightFlagUp(true);
-    } else {//if (moveDirection == MOVE_STOP) {
+    } else { //if (moveDirection == MOVE_STOP) {
         set_isLeftFlagUp(false);
         set_isRightFlagUp(false);
     }
@@ -116,8 +125,23 @@ void PlaneModel::move(int deltaTime)
             lastFuellSubstraction = 0;
 
             if (fuell() <= 0) {
+//                qDebug() << "if (fuell() <= 0) planeDestroyed";
                 emit planeDestroyed(id());
             }
+        }
+
+        if (posX() < -200 || posX() > 1500) {
+            set_fuell(0);
+            set_isAlive(false);
+//            qDebug() << "posX() < -200 || posX() > 1500 planeDestroyed";
+            emit planeDestroyed(id());
+        }
+
+        if (posY() < -200 || posY() > 1000) {
+            set_fuell(0);
+            set_isAlive(false);
+//            qDebug() << "(posY() < -200 || posY() > 1000) planeDestroyed";
+            emit planeDestroyed(id());
         }
     }
 }

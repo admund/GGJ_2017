@@ -33,6 +33,9 @@ public:
     void changeMoveDirection();
 
     Q_INVOKABLE void move(int deltaTime);
+
+private:
+    int lastFuellSubstraction = 0;
 };
 
 #endif // PLANEMODEL_H

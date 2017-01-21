@@ -50,6 +50,9 @@ void AirportLogic::init()
         planeModel->set_posX(200 + 100 * i);
         planeModel->set_posY(200 + 50 * i);
 
+        planeModel->set_fuell(qrand() % 100);
+        planeModel->set_fuellMax(100);
+
         planeList()->addPlaneModel(planeModel);
 
         planeCnt++;
@@ -96,7 +99,6 @@ void AirportLogic::checkCollisions()
 
             bool intersect = gridRects.at(j).intersects(planeRect);
             if (intersect) {
-                qDebug() << "idText" << QString::number(plane->id());
                 airportGrid()->get(j)->set_touchedBy(QString::number(plane->id()));
             }
         }

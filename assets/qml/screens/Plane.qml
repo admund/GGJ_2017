@@ -29,17 +29,37 @@ Rectangle {
     }
 
     Rectangle {
+        width: fuellText.width
+        height: 10
+
+        radius: 3
+
+        visible: mouseForHover.containsMouse
+
         anchors {
+            horizontalCenter: plane.horizontalCenter
             bottom: plane.top
-            left: plane.left
-            right: plane.right
         }
 
         color: Colors.White
 
-//        OpenSansText {
+        OpenSansText {
+            id: fuellText
 
-//        }
+            anchors.centerIn: parent
+
+            text: planModel.fuell + "/" + planModel.fuellMax
+
+            font.pointSize: 8
+        }
+    }
+
+    MouseArea {
+        id: mouseForHover
+
+        anchors.fill: parent
+
+        hoverEnabled: true
     }
 
     Timer {

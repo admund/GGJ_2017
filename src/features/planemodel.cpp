@@ -75,12 +75,18 @@ void PlaneModel::move(int deltaTime)
             set_moveRotation(((moveRotation() - rotationSpeed) + 360) % 360);
 
         } else {
-            float velocity = .3;
+            float velocity = .6;
             double moveRotationInRadians = qDegreesToRadians((float)moveRotation());
             float newPosX = velocity * qCos(moveRotationInRadians);
             float newPosY = velocity * qSin(moveRotationInRadians);
             set_posX(posX() + newPosX);
             set_posY(posY() + newPosY);
+        }
+
+        lastFuellSubstraction += deltaTime;
+        if (lastFuellSubstraction > 1000) {
+            set_fuell(fuell() - 1);
+            lastFuellSubstraction = 0;
         }
     }
 }

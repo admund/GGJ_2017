@@ -11,5 +11,5 @@ var Red = "#FF0000"
 var White = "#FFFFFF"
 var Yellow = "#FFFF00"
 
-var DefaultTextColor = White
+var DefaultTextColor = Black
 var DisabledTextColor = Gray

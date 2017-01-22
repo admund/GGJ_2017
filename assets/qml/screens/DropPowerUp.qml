@@ -44,7 +44,7 @@ Item {
         x: -500
         y: -500
 
-        color: Colors.Black
+        color: Colors.Transparent
 
         Image {
             id: parachute

@@ -43,6 +43,20 @@ Rectangle {
         rotation: planModel ? planModel.moveRotation : 0
     }
 
+    Image {
+        width: 19
+        height: 27
+
+        anchors {
+            right: parent.horizontalCenter
+            bottom: parent.verticalCenter
+        }
+
+        visible: planModel ? planModel.isUnload && !planModel.isSelected : false
+
+        source: "../../images/flaga_1.png"
+    }
+
     Rectangle {
         width: fuellText.width
         height: 10

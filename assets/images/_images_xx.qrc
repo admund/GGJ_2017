@@ -55,5 +55,18 @@
         <file>poweruppanel_inactive_doubleboost.png</file>
         <file>poweruppanel_inactive_fuel.png</file>
         <file>poweruppanel_inactive_speed.png</file>
+        <file>button_goback.png</file>
+        <file>button_goback_hover.png</file>
+        <file>button_playagain.png</file>
+        <file>button_playagain_hover.png</file>
+        <file>flaga_1.png</file>
+        <file>gwiazdka_pelna.png</file>
+        <file>gwiazdka_pusta.png</file>
+        <file>popup_lose.png</file>
+        <file>popup_win.png</file>
+        <file>miasto_ilu_3.png</file>
+        <file>miasto_name_3.png</file>
+        <file>miasto_name_3_hover.png</file>
+        <file>loading_4.png</file>
     </qresource>
 </RCC>

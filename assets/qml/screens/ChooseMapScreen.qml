@@ -41,10 +41,10 @@ GameScreen {
                 leftMargin: 30
             }
 
-            level: 2 // TODO add level 3
-            imageName: "../../images/miasto_ilu_1.png"
-            buttonName: "../../images/miasto_name_1.png"
-            buttonHoverName: "../../images/miasto_name_1_hover.png"
+            level: 3
+            imageName: "../../images/miasto_ilu_3.png"
+            buttonName: "../../images/miasto_name_3.png"
+            buttonHoverName: "../../images/miasto_name_3_hover.png"
         }
     }
 }

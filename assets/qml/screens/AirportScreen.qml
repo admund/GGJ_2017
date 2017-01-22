@@ -44,16 +44,15 @@ GameScreen {
 
                 rotation: airportGridModelRole.tileRotation
 
-                OpenSansText {
-                    anchors.fill: parent
-                    anchors.centerIn: parent
+//                OpenSansText {
+//                    anchors.fill: parent
+//                    anchors.centerIn: parent
 
-                    text: airportGridModelRole.touchedBy
+//                    text: airportGridModelRole.touchedBy
 
-                    color: Colors.Black
-                }
+//                    color: Colors.Black
+//                }
 
-//                color: getTile(airportGridModelRole.tileType)
                 source: getTile(airportGridModelRole.tileType)
             }
 

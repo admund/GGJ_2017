@@ -30,10 +30,11 @@ public:
     Q_INVOKABLE void changeSelectedPlane();
     Q_INVOKABLE void spawn();
 
-    void init(); // TODO add some JSON path
     void saveMap();
+    void exit();
 
 private slots:
+    void init(int levelId);
     void onPlaneDestroyed(int planeId);
     void onCheckPlaneControll(int planeId);
 

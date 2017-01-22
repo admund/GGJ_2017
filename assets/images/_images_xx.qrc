@@ -18,5 +18,15 @@
         <file>tlo_pas2.png</file>
         <file>tlo_rozek.png</file>
         <file>tlo_woda.png</file>
+        <file>loading_1.png</file>
+        <file>loading_2.png</file>
+        <file>miasto_ilu_1.png</file>
+        <file>miasto_name_1.png</file>
+        <file>miasto_name_1_hover.png</file>
+        <file>wybor_mapy_tlo.png</file>
+        <file>plane_crushed.png</file>
+        <file>play_button.png</file>
+        <file>play_hover.png</file>
+        <file>play_onpress.png</file>
     </qresource>
 </RCC>

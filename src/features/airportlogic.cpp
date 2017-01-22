@@ -39,14 +39,14 @@ const QString path("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\");
 //const QString path("json\\");
 
 #include <QDebug>
-void AirportLogic::init()
+void AirportLogic::init(int levelNr)
 {
-    qDebug() << "void AirportLogic::init()";
+    qDebug() << "void AirportLogic::init()" << levelNr;
 
     qsrand(QDateTime::currentMSecsSinceEpoch());
 
     QString levelData("");
-    const QString fileNameLevel(path + QString("level_") + QString::number(1) + QString(".json"));
+    const QString fileNameLevel(path + QString("level_") + QString::number(levelNr) + QString(".json"));
     getStringFromFile(fileNameLevel, levelData);
 
     QJsonObject gridObj;
@@ -65,13 +65,13 @@ void AirportLogic::init()
     }
 
     QString spawnsData("");
-    const QString fileNameSpawns(path + QString("spawns_level_") + QString::number(1) + QString(".json"));
+    const QString fileNameSpawns(path + QString("spawns_level_") + QString::number(levelNr) + QString(".json"));
     getStringFromFile(fileNameSpawns, spawnsData);
 
     QJsonObject spawnsObj;
     if (JsonHelpers::jsonObjectFromString(spawnsData, spawnsObj)) {
         QJsonArray spawns = spawnsObj["spawns"].toArray();
-        qDebug() << "spawns" << spawns.size();
+//        qDebug() << "spawns" << spawns.size();
         for (int i=0; i<spawns.size(); i++) {
             QJsonObject spawnJson = spawns.at(i).toObject();
 
@@ -118,11 +118,12 @@ void AirportLogic::init()
 //    }
 }
 
+bool cellCalculated = false;
 void AirportLogic::setCellSize()
 {
-    if (!isInited) {
-        init();
-        isInited = true;
+    if (!cellCalculated) {
+//        init();
+        cellCalculated = true;
         cellSize = (1280 - 300) / 17;
 
         for (int j=0; j<12; j++) {
@@ -245,6 +246,21 @@ void AirportLogic::saveMap()
             stream << strJson << endl;
         }
     }
+}
+
+void AirportLogic::exit()
+{
+    qDebug() << "void AirportLogic::exit()";
+
+    planeList()->clear();
+    airportGrid()->clear();
+
+    for (int i=0; i<spawnList.size(); i++) {
+        delete spawnList.at(i);
+    }
+    spawnList.clear();
+
+    isInited = false;
 }
 
 void AirportLogic::onPlaneDestroyed(int planeId)

@@ -88,7 +88,7 @@ void PlaneModel::goToRunwayStart()
 }
 
 void PlaneModel::goToRamp() {
-    qDebug() << "void PlaneModel::goToRamp()";
+//    qDebug() << "void PlaneModel::goToRamp()";
 
     if (isAlive()) {
         set_isUnload(true);

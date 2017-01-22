@@ -20,5 +20,9 @@
         <file>screens/AirportScreen.qml</file>
         <file>screens/FlagController.qml</file>
         <file>screens/Plane.qml</file>
+        <file>screens/StartScreen.qml</file>
+        <file>screens/ChooseMapScreen.qml</file>
+        <file>screens/LoadingScreen.qml</file>
+        <file>screens/ChooseMapElement.qml</file>
     </qresource>
 </RCC>

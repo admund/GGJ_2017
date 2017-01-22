@@ -43,6 +43,13 @@ bool Spinacz::eventFilter(QObject *watched, QEvent *event)
             root()->airportLogic()->spawn();
             return true;
         }
+
+        if (keyEvent->key() == Qt::Key_Escape) {
+            root()->airportLogic()->exit();
+            root()->set_showAirport(false);
+//            root()->set_showChooseMap(true);
+            return true;
+        }
     }
 
     return false;
@@ -70,6 +77,7 @@ void Spinacz::connectDataSource() const
 
 void Spinacz::connectFeatures() const
 {
+    connect(root(), SIGNAL(initLevel(int)), root()->airportLogic(), SLOT(init(int)));
 }
 
 // Data sources

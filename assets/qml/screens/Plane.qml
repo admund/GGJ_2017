@@ -16,29 +16,31 @@ Rectangle {
     width: 30
     height: 30
 
-    x: planModel.posX
-    y: planModel.posY
+    x: planModel ? planModel.posX : 0
+    y: planModel ? planModel.posY : 0
 
-    color: "#0000B000"
+    color: Colors.Transparent
 
     Image {
         id: planeImage
         anchors.fill: parent
 
-        rotation: planModel.moveRotation
+        rotation: planModel ? planModel.moveRotation : 0
 
         smooth: true
-        visible: false
+        visible: planModel ? !planModel.isAlive : false
 
-        source: "../../images/plane.png"
+        source:  planModel && planModel.isAlive ? "../../images/plane.png" : "../../images/plane_crushed.png"
     }
 
     ColorOverlay {
         anchors.fill: planeImage
         source: planeImage
-        color: isSelected ? planModel.colorName : Colors.Black
+        color: isSelected && planModel ? planModel.colorName : Colors.Black
 
-        rotation: planModel.moveRotation
+        visible: planModel ? planModel.isAlive : false
+
+        rotation: planModel ? planModel.moveRotation : 0
     }
 
     Rectangle {
@@ -59,7 +61,7 @@ Rectangle {
 
             anchors.centerIn: parent
 
-            text: planModel.fuell + "/" + planModel.fuellMax
+            text: planModel ? planModel.fuell + "/" + planModel.fuellMax : ""
 
             font.pointSize: 8
         }
@@ -76,7 +78,7 @@ Rectangle {
     Timer {
         interval: deltaTime
         repeat: true
-        running: planModel.isAlive
+        running: planModel ? planModel.isAlive : false
 
         onTriggered: planModel.move(deltaTime)
     }
@@ -86,7 +88,7 @@ Rectangle {
 
         interval: 15
         repeat: true
-        running: planModel.isScored
+        running: planModel ? planModel.isScored : false
 
         onTriggered: {
             plane.scale += .01

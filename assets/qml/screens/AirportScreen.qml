@@ -173,7 +173,7 @@ GameScreen {
         id: spawnTimer
         interval: 0//20000
         repeat: false//true
-        running: true
+        running: _logic.showAirport
 
         onTriggered: {
             airportLogic.spawn()

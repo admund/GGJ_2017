@@ -31,6 +31,18 @@ Item {
     ScreenSwitcher {
         id: screenSwitcher
 
+        StartScreen {
+            id: startScreen
+        }
+
+        ChooseMapScreen {
+            id: chooseMapScreen
+        }
+
+        LoadingScreen {
+            id: loadingScreen
+        }
+
         AirportScreen {
             id: airportScreen
         }
@@ -43,9 +55,47 @@ Item {
         onTriggered: _logic.qmlFullyLoaded()
     }
 
+//    Connections {
+//        target: _logic.login.model
+
+//        onIsLoggedChanged: {
+//            if (_logic.login.model.isLogged) {
+//                screenSwitcher.switchScreenForward(matchingScreen)
+//            } else {
+//                screenSwitcher.switchScreenBackward(loginScreen)
+//            }
+//        }
+//    }
+
+    Connections {
+        target: _logic
+
+        onShowChooseMapChanged: {
+            if (_logic.showChooseMap) {
+                screenSwitcher.switchScreenForward(chooseMapScreen)
+            }
+        }
+
+        onShowLoadingChanged: {
+            if (_logic.showLoadingChanged) {
+                screenSwitcher.switchScreenForward(loadingScreen)
+            }
+        }
+
+        onShowAirportChanged: {
+            if (_logic.showAirport) {
+                screenSwitcher.switchScreenForward(airportScreen)
+            } else {
+                screenSwitcher.switchScreenBackward(chooseMapScreen)
+            }
+        }
+    }
+
+
     Component.onCompleted: {
         qmlLoadedTimer.start()
-        screenSwitcher.initWithScreen(airportScreen)
+        screenSwitcher.initWithScreen(startScreen)
+//        screenSwitcher.initWithScreen(airportScreen)
     }
 
     function closeAllDialogs() {

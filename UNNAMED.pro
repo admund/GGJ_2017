@@ -58,4 +58,7 @@ DISTFILES += \
     assets/images/tlo_pas.png \
     assets/images/tlo_pas2.png \
     assets/images/tlo_pas_poczatek.png \
-    assets/images/tlo_rozek.png
+    assets/images/tlo_rozek.png \
+    assets/images/play_hover.png \
+    assets/images/play_onpress.png \
+    assets/images/play_button.png

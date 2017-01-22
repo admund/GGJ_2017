@@ -3,6 +3,9 @@
 RootLogic::RootLogic(QObject* parent)
     : QObject(parent)
     , m_airportLogic(new AirportLogic(this))
+    , m_showLoading(false)
+    , m_showChooseMap(false)
+    , m_showAirport(false)
 {
 #ifdef QT_DEBUG
     m_isDebugModeOn = true;

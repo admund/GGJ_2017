@@ -28,5 +28,10 @@
         <file>play_button.png</file>
         <file>play_hover.png</file>
         <file>play_onpress.png</file>
+        <file>kanister_25.png</file>
+        <file>kanister_50.png</file>
+        <file>kanister_75.png</file>
+        <file>kanister_empty.png</file>
+        <file>kanister_full.png</file>
     </qresource>
 </RCC>

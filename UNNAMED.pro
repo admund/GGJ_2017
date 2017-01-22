@@ -61,4 +61,13 @@ DISTFILES += \
     assets/images/tlo_rozek.png \
     assets/images/play_hover.png \
     assets/images/play_onpress.png \
-    assets/images/play_button.png
+    assets/images/play_button.png \
+    assets/images/miasto_odblokowac.png \
+    assets/images/miasto_wynik.png \
+    assets/images/zegar_tarcza.png \
+    assets/images/zegar_wskazowka2.png \
+    assets/images/kanister_25.png \
+    assets/images/kanister_50.png \
+    assets/images/kanister_75.png \
+    assets/images/kanister_empty.png \
+    assets/images/kanister_full.png

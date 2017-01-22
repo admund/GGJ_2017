@@ -46,24 +46,72 @@ Rectangle {
     Rectangle {
         width: fuellText.width
         height: 10
-
         radius: 3
-
-//        visible: mouseForHover.containsMouse TODO
 
         anchors {
             horizontalCenter: plane.horizontalCenter
-            bottom: plane.top
+//            bottom: plane.top
+            top: plane.bottom
         }
 
         OpenSansText {
             id: fuellText
 
             anchors.centerIn: parent
-
             text: planModel ? planModel.fuell + "/" + planModel.fuellMax : ""
-
             font.pointSize: 8
+        }
+    }
+
+    Image {
+        id: fuellIdicator
+
+        width: 21
+        height: 22
+
+        visible: isIndicatorVisible()
+
+        anchors {
+            bottom: plane.top
+            right: plane.left
+        }
+
+        source: getFuellImage()
+
+        function isIndicatorVisible() {
+            if (!planModel || !planModel.isAlive) {
+                return false
+            }
+
+            if (isSelected) {
+                return true
+            }
+
+            var percent = planModel.fuell / planModel.fuellMax
+            if (percent < .2) {
+                return true
+            }
+
+            return false
+        }
+
+        function getFuellImage() {
+            if (!planModel) {
+                return "../../images/kanister_empty.png"
+            }
+
+            var percent = planModel.fuell / planModel.fuellMax
+            if (percent > .8) {
+                return "../../images/kanister_full.png"
+            } else if (percent > .6) {
+                return "../../images/kanister_75.png"
+            } else if (percent > .4) {
+                return "../../images/kanister_50.png"
+            } else if (percent > .2) {
+                return "../../images/kanister_25.png"
+            } else {
+                return "../../images/kanister_empty.png"
+            }
         }
     }
 

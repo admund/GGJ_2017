@@ -148,7 +148,7 @@ void PlaneModel::move(int deltaTime)
                 newRotation = newRotation - 360;
             }
             set_moveRotation(newRotation);
-            increaseSpeed(-.01);
+            increaseSpeed(-.01f);
 
         } else if (moveDirection() == MOVE_LEFT) {
             double newRotation = moveRotation() - rotation();
@@ -156,7 +156,7 @@ void PlaneModel::move(int deltaTime)
                 newRotation = newRotation + 360;
             }
             set_moveRotation(newRotation);
-            increaseSpeed(-.01);
+            increaseSpeed(-.01f);
 
         } else {
             increaseSpeed(.02f);
@@ -173,7 +173,7 @@ void PlaneModel::move(int deltaTime)
 
     lastFuellSubstraction += deltaTime;
     if ((isOnGrass() && lastFuellSubstraction > 500) || lastFuellSubstraction > 1000) {
-//        set_fuell(fuell() - 1); TODO odblokowac
+        set_fuell(fuell() - 1);
         lastFuellSubstraction = 0;
 
         if (fuell() <= 0) {

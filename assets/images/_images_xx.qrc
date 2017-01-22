@@ -5,7 +5,6 @@
         <file>flag_right.png</file>
         <file>flag_stop.png</file>
         <file>flag_panel.png</file>
-        <file>map_london.png</file>
         <file>panel_objectives.png</file>
         <file>tlo_ciemne.png</file>
         <file>tlo_hangar.png</file>
@@ -48,10 +47,13 @@
         <file>pasekdolny.png</file>
         <file>powerup_doubleboost.png</file>
         <file>powerup_fuel.png</file>
-        <file>powerup_inactive_doubleboost.png</file>
-        <file>powerup_inactive_fuel.png</file>
-        <file>powerup_inactive_speed.png</file>
         <file>powerup_speed.png</file>
         <file>spadochron.png</file>
+        <file>poweruppanel_doubleboost.png</file>
+        <file>poweruppanel_fuel.png</file>
+        <file>poweruppanel_speed.png</file>
+        <file>poweruppanel_inactive_doubleboost.png</file>
+        <file>poweruppanel_inactive_fuel.png</file>
+        <file>poweruppanel_inactive_speed.png</file>
     </qresource>
 </RCC>

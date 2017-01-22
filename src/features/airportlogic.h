@@ -8,6 +8,7 @@
 #include "planelistmodel.h"
 #include "spawnpointmodel.h"
 #include "scoremodel.h"
+#include "skillslogic.h"
 #include "../macros.h"
 
 struct PlaneConfigStruct {
@@ -29,6 +30,7 @@ class AirportLogic : public QObject
     AUTO_Q_PROPERTY(PlaneListModel*, planeList)
     AUTO_Q_PROPERTY(FlagControllerLogic*, flagController)
     AUTO_Q_PROPERTY(ScoreModel*, score)
+    AUTO_Q_PROPERTY(SkillsLogic*, skills)
 
 public:
     explicit AirportLogic(QObject* parent = 0);
@@ -46,6 +48,10 @@ private slots:
     void init(int levelId);
     void onPlaneDestroyed(int planeId);
     void onCheckPlaneControll(int planeId);
+
+    void onSpeedUpSkill();
+    void onFuelSkill();
+    void onDoubleSkill();
 
 private:
     void loadPlanesConfig();

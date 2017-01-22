@@ -22,21 +22,21 @@ Item {
             right: parent.right
         }
 
-        source: "../../images/map_london.png"
+        source: "../../images/miasto_name_" + _logic.loadinglevelId + ".png" // TODO haczor
     }
 
-    Image {
-        id: objectivesImage
+    SkillsPanel {
+        id: skillsPanel
 
         height: 107
         width: root.width
+
+        skillsLogic: _logic.airportLogic.skills
 
         anchors {
             top: mapImage.bottom
             right: parent.right
         }
-
-        source: "../../images/panel_objectives.png"
     }
 
     Rectangle {
@@ -46,7 +46,7 @@ Item {
         height: 431
 
         anchors {
-            top: objectivesImage.bottom
+            top: skillsPanel.bottom
             right: parent.right
         }
 

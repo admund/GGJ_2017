@@ -78,6 +78,16 @@ void Spinacz::connectDataSource() const
 void Spinacz::connectFeatures() const
 {
     connect(root(), SIGNAL(initLevel(int)), root()->airportLogic(), SLOT(init(int)));
+
+
+     connect(root()->airportLogic()->skills(), SIGNAL(speedUpSkillSignal()),
+            root()->airportLogic(), SLOT(onSpeedUpSkill()));
+
+     connect(root()->airportLogic()->skills(), SIGNAL(fuellSkillSignal()),
+            root()->airportLogic(), SLOT(onFuelSkill()));
+
+     connect(root()->airportLogic()->skills(), SIGNAL(doubleSkillSignal()),
+            root()->airportLogic(), SLOT(onDoubleSkill()));
 }
 
 // Data sources

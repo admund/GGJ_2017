@@ -17,6 +17,7 @@ AirportLogic::AirportLogic(QObject* parent)
     , m_planeList(new PlaneListModel(this))
     , m_flagController(new FlagControllerLogic(this))
     , m_score(new ScoreModel(this))
+    , m_skills(new SkillsLogic(this))
 {
     pallet.append(QString("#e92f18"));
     pallet.append(QString("#1c195b"));
@@ -266,6 +267,10 @@ void AirportLogic::exit()
     score()->set_badScore(0);
     score()->set_goodScore(0);
 
+    skills()->set_fuellSkillCnt(0);
+    skills()->set_speedUpSkillCnt(0);
+    skills()->set_doubleSkillCnt(0);
+
     isInited = false;
 }
 
@@ -283,6 +288,32 @@ void AirportLogic::onCheckPlaneControll(int planeId)
     if (selectedPlane() == -1 || selectedPlane() == planeId) {
         changeSelectedPlane();
     }
+}
+
+void AirportLogic::onSpeedUpSkill()
+{
+    qDebug() << "void AirportLogic::onSpeedUpSkill()";
+
+    if (selectedPlane() != -1) {
+        PlaneModel* plane = planeList()->get(selectedPlane());
+        plane->set_speedMax(plane->speedMax() * 2);
+    }
+}
+
+void AirportLogic::onFuelSkill()
+{
+    qDebug() << "void AirportLogic::onFuelSkill()";
+    if (selectedPlane() != -1) {
+        PlaneModel* plane = planeList()->get(selectedPlane());
+        plane->set_fuell(plane->fuellMax());
+    }
+}
+
+void AirportLogic::onDoubleSkill()
+{
+    qDebug() << "void AirportLogic::onDoubleSkill()";
+    onSpeedUpSkill();
+    onFuelSkill();
 }
 
 void AirportLogic::changeMoveDirection(int moveDirection)

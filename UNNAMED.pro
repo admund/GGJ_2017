@@ -19,7 +19,8 @@ HEADERS += \
     src/features/planemodel.h \
     src/features/planelistmodel.h \
     src/features/spawnpointmodel.h \
-    src/features/scoremodel.h
+    src/features/scoremodel.h \
+    src/features/skillslogic.h
 
 
 SOURCES += src/main.cpp \
@@ -36,7 +37,8 @@ SOURCES += src/main.cpp \
     src/features/planemodel.cpp \
     src/features/planelistmodel.cpp \
     src/features/spawnpointmodel.cpp \
-    src/features/scoremodel.cpp
+    src/features/scoremodel.cpp \
+    src/features/skillslogic.cpp
 
 
 RESOURCES += assets/qml/_qml.qrc \
@@ -78,4 +80,5 @@ DISTFILES += \
     assets/images/plane_crushed_1.png \
     assets/images/plane_crushed_2.png \
     assets/images/plane_crushed_3.png \
-    assets/images/plane_crushed_4.png
+    assets/images/plane_crushed_4.png \
+    src/features/SkillsLogic.qml

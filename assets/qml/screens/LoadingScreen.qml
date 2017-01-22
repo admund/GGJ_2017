@@ -11,7 +11,7 @@ GameScreen {
         source: "../../images/loading_" + (_logic.loadinglevelId + 1) + ".png"
 
         Timer {
-            interval: 3000
+            interval: 5//3000
             repeat: false
             running: _logic.showLoading
 

@@ -10,12 +10,6 @@ GameScreen {
 
     property QtObject airportLogic: _logic.airportLogic
 
-    Rectangle {
-        anchors.fill: parent
-
-        color: Colors.DarkGreen
-    }
-
     GridView {
         id: airportGrid
 
@@ -98,21 +92,11 @@ GameScreen {
         model: airportLogic.planeList
 
         delegate: Plane {
-                id: plane
-                planModel: planeModelRole
+            id: plane
+            planModel: planeModelRole
 
-                isSelected: airportLogic.selectedPlane === index
-
-                }
-//     TODO collider samolotu
-//            Rectangle {
-//                x: plane.x
-//                y: plane.y
-//                width: plane.width
-//                height: plane.height
-//                radius: width/2
-
-//                color: Colors.Yellow
+            isSelected: airportLogic.selectedPlane === index
+        }
     }
 
     FlagController {
@@ -148,6 +132,10 @@ GameScreen {
         }
 
         source: "../../images/pasekdolny.png"
+    }
+
+    DropPowerUp {
+        skillsLogic: airportLogic.skills
     }
 
     OpenSansText {

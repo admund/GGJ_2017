@@ -70,7 +70,7 @@ GameScreen {
 
                 onClicked: {
                     if (airportLogic.editMode) {
-                        airportGridModelRole.tileType = (airportGridModelRole.tileType + 1) % 8
+                        airportGridModelRole.tileType = (airportGridModelRole.tileType + 1) % 10
                     }
                 }
             }
@@ -139,6 +139,17 @@ GameScreen {
         }
     }
 
+    Image {
+        height: 36
+        anchors {
+            left: parent.left
+            right: flagController.left
+            bottom: parent.bottom
+        }
+
+        source: "../../images/pasekdolny.png"
+    }
+
     OpenSansText {
         id: goodScore
 
@@ -157,6 +168,20 @@ GameScreen {
         anchors.top: goodScore.bottom
 
         text: "Bad Score: " + airportLogic.score.badScore
+    }
+
+    Rectangle {
+        id: magicButton
+        width: 10
+        height: 10
+
+        color: airportLogic.editMode ? Colors.Yellow : Colors.Transparent
+
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: airportLogic.editMode = !airportLogic.editMode
+        }
     }
 
     Timer {
@@ -195,6 +220,10 @@ GameScreen {
             return "../../images/tlo_rozek.png"//GRASS_2
         } else if (tileType === 7) {
             return "../../images/tlo_parking.png"//ROAD_2
+        } else if (tileType === 8) {
+            return "../../images/tlo_lampki.png"//GRASS_3
+        } else if (tileType === 9) {
+            return "../../images/tlo_wiatrolap.png"//GRASS_4
         } else {
             return "../../images/tlo_ciemne.png"//GRASS
         }

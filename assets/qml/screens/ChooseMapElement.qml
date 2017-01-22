@@ -25,8 +25,6 @@ Rectangle {
             top: map1.top
             horizontalCenter: map1.horizontalCenter
         }
-
-//        source: "../../images/miasto_ilu_1.png"
         source: imageName
     }
 
@@ -46,7 +44,6 @@ Rectangle {
             anchors.fill: parent
 
             source: mouseHover.containsMouse ? buttonHoverName : buttonName
-//            source: mouseHover.containsMouse ? "../../images/miasto_name_1_hover.png" : "../../images/miasto_name_1.png"
         }
 
         MouseArea {
@@ -56,6 +53,7 @@ Rectangle {
             hoverEnabled: true
             onClicked: {
                 _logic.initLevel(level)
+                _logic.loadinglevelId = level
                 _logic.showLoading = true
             }
         }

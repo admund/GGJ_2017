@@ -24,6 +24,8 @@ public:
     static const int TILE_TYPE_RAMP = 5;
     static const int TILE_TYPE_GRASS_2 = 6;
     static const int TILE_TYPE_ROAD_2 = 7;
+    static const int TILE_TYPE_GRASS_3 = 8;
+    static const int TILE_TYPE_GRASS_4 = 9;
 
     void clear();
 };

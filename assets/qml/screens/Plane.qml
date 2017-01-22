@@ -30,7 +30,7 @@ Rectangle {
         smooth: true
         visible: planModel ? !planModel.isAlive : false
 
-        source:  planModel && planModel.isAlive ? "../../images/plane.png" : "../../images/plane_crushed.png"
+        source:  planModel ? planModel.isAlive ? planModel.planeName : planModel.planeCrushedName: ""
     }
 
     ColorOverlay {
@@ -48,9 +48,10 @@ Rectangle {
         height: 10
         radius: 3
 
+        visible: planModel ? planModel.isAlive : false
+
         anchors {
             horizontalCenter: plane.horizontalCenter
-//            bottom: plane.top
             top: plane.bottom
         }
 

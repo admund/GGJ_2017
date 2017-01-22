@@ -8,7 +8,7 @@ GameScreen {
 
         anchors.fill: parent
 
-        source: "../../images/loading_2.png"
+        source: "../../images/loading_" + (_logic.loadinglevelId + 1) + ".png"
 
         Timer {
             interval: 3000

@@ -5,7 +5,6 @@
         <file>flag_right.png</file>
         <file>flag_stop.png</file>
         <file>flag_panel.png</file>
-        <file>plane.png</file>
         <file>map_london.png</file>
         <file>panel_objectives.png</file>
         <file>tlo_ciemne.png</file>
@@ -20,11 +19,11 @@
         <file>tlo_woda.png</file>
         <file>loading_1.png</file>
         <file>loading_2.png</file>
+        <file>loading_3.png</file>
         <file>miasto_ilu_1.png</file>
         <file>miasto_name_1.png</file>
         <file>miasto_name_1_hover.png</file>
         <file>wybor_mapy_tlo.png</file>
-        <file>plane_crushed.png</file>
         <file>play_button.png</file>
         <file>play_hover.png</file>
         <file>play_onpress.png</file>
@@ -33,5 +32,26 @@
         <file>kanister_75.png</file>
         <file>kanister_empty.png</file>
         <file>kanister_full.png</file>
+        <file>plane_1.png</file>
+        <file>plane_2.png</file>
+        <file>plane_3.png</file>
+        <file>plane_4.png</file>
+        <file>plane_crushed_1.png</file>
+        <file>plane_crushed_2.png</file>
+        <file>plane_crushed_3.png</file>
+        <file>plane_crushed_4.png</file>
+        <file>tlo_lampki.png</file>
+        <file>tlo_wiatrolap.png</file>
+        <file>miasto_ilu_2.png</file>
+        <file>miasto_name_2.png</file>
+        <file>miasto_name_2_hover.png</file>
+        <file>pasekdolny.png</file>
+        <file>powerup_doubleboost.png</file>
+        <file>powerup_fuel.png</file>
+        <file>powerup_inactive_doubleboost.png</file>
+        <file>powerup_inactive_fuel.png</file>
+        <file>powerup_inactive_speed.png</file>
+        <file>powerup_speed.png</file>
+        <file>spadochron.png</file>
     </qresource>
 </RCC>

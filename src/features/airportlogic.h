@@ -10,11 +10,20 @@
 #include "scoremodel.h"
 #include "../macros.h"
 
+struct PlaneConfigStruct {
+    float speedMulti;
+    float speedMax;
+    float rotation;
+    float maxFuell;
+    QString planeName;
+    QString planeCrushName;
+};
+
 class AirportLogic : public QObject
 {
     Q_OBJECT
 
-    AUTO_READ_ONLY_Q_PROPERTY(bool, editMode)
+    AUTO_Q_PROPERTY(bool, editMode)
     AUTO_Q_PROPERTY(int, selectedPlane)
     AUTO_Q_PROPERTY(AirportGridModel*, airportGrid)
     AUTO_Q_PROPERTY(PlaneListModel*, planeList)
@@ -39,11 +48,14 @@ private slots:
     void onCheckPlaneControll(int planeId);
 
 private:
+    void loadPlanesConfig();
+
     bool isInited = false;
     int cellSize = 0;
     QList<QRect> gridRects;
     QList<SpawnPointModel*> spawnList;
     QVector<QString> pallet;
+    QVector<PlaneConfigStruct> planeConfigList;
 };
 
 #endif // AIRPORTLOGIC_H

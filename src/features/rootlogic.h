@@ -18,6 +18,8 @@ class RootLogic : public QObject
     AUTO_Q_PROPERTY(bool, showLoading)
     AUTO_Q_PROPERTY(bool, showAirport)
 
+    AUTO_Q_PROPERTY(int, loadinglevelId)
+
 public:
     explicit RootLogic(QObject* parent = 0);
 

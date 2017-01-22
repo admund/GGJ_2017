@@ -70,4 +70,12 @@ DISTFILES += \
     assets/images/kanister_50.png \
     assets/images/kanister_75.png \
     assets/images/kanister_empty.png \
-    assets/images/kanister_full.png
+    assets/images/kanister_full.png \
+    assets/images/plane_1.png \
+    assets/images/plane_2.png \
+    assets/images/plane_3.png \
+    assets/images/plane_4.png \
+    assets/images/plane_crushed_1.png \
+    assets/images/plane_crushed_2.png \
+    assets/images/plane_crushed_3.png \
+    assets/images/plane_crushed_4.png

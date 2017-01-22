@@ -26,6 +26,8 @@ class PlaneModel : public QObject
     AUTO_Q_PROPERTY(double, moveRotation)
 
     AUTO_Q_PROPERTY(double, speed)
+    AUTO_Q_PROPERTY(double, speedMulti)
+    AUTO_Q_PROPERTY(double, speedMax)
     AUTO_Q_PROPERTY(double, rotation)
 
     AUTO_Q_PROPERTY(bool, isOnGrass)
@@ -33,6 +35,8 @@ class PlaneModel : public QObject
     AUTO_Q_PROPERTY(int, fuellMax)
 
     AUTO_Q_PROPERTY(QString, colorName)
+    AUTO_Q_PROPERTY(QString, planeName)
+    AUTO_Q_PROPERTY(QString, planeCrushedName)
 
 public:
     explicit PlaneModel(QObject* parent = 0);

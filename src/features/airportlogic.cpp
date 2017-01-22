@@ -24,9 +24,12 @@ AirportLogic::AirportLogic(QObject* parent)
     pallet.append(QString("#ff6640"));
     pallet.append(QString("#4e5fb4"));
     pallet.append(QString("#ffc747"));
-    pallet.append(QString("#478052"));
-    pallet.append(QString("#2ca67f"));
+
+    loadPlanesConfig();
 }
+
+const QString path("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\");
+//const QString path("json\\");
 
 void getStringFromFile(const QString& fileName, QString& data) {
     QString filename(fileName);
@@ -35,14 +38,38 @@ void getStringFromFile(const QString& fileName, QString& data) {
     data = QString(file.readAll());
 }
 
-const QString path("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\");
-//const QString path("json\\");
-
 #include <QDebug>
+void AirportLogic::loadPlanesConfig()
+{
+    QString planesData("");
+    const QString fileNamePlanes(path + QString("planes_conf.json"));
+    getStringFromFile(fileNamePlanes, planesData);
+
+    QJsonObject planesObj;
+    if (JsonHelpers::jsonObjectFromString(planesData, planesObj)) {
+        QJsonArray planes = planesObj["planes"].toArray();
+        qDebug() << "planes" << planes.size();
+        for (int i=0; i<planes.size(); i++) {
+            QJsonObject planeJson = planes.at(i).toObject();
+
+            PlaneConfigStruct planeStruct;
+            planeStruct.speedMulti = planeJson["speed_multi"].toDouble();
+            planeStruct.speedMax = planeJson["speed_max"].toDouble();
+            planeStruct.rotation = planeJson["rotation"].toDouble();
+            planeStruct.maxFuell = planeJson["max_fuell"].toInt();
+            planeStruct.planeName =
+                    QString("../../images/plane_") + QString::number(i+1) + QString(".png");
+            planeStruct.planeCrushName =
+                    QString("../../images/plane_crushed_") + QString::number(i+1) + QString(".png");
+
+            planeConfigList.append(planeStruct);
+        }
+    }
+}
+
 void AirportLogic::init(int levelNr)
 {
     qDebug() << "void AirportLogic::init()" << levelNr;
-
     qsrand(QDateTime::currentMSecsSinceEpoch());
 
     QString levelData("");
@@ -83,46 +110,12 @@ void AirportLogic::init(int levelNr)
             spawnList.append(spawnPointModel);
         }
     }
-
-//    QString planesData("");
-//    const QString fileNamePlanes(path + QString(planes_level_") + QString::number(1) + QString(".json"));
-//    getStringFromFile(fileNamePlanes, planesData);
-
-//    QJsonObject planesObj;
-//    if (JsonHelpers::jsonObjectFromString(planesData, planesObj)) {
-//        QJsonArray planes = planesObj["planes"].toArray();
-////        qDebug() << "planes" << planes.size();
-//        for (int i=0; i<planes.size(); i++) {
-//            QJsonObject planeJson = planes.at(i).toObject();
-
-//            PlaneModel* planeModel = new PlaneModel(this);
-//            planeModel->set_id(planeJson["plane_id"].toInt());
-//            planeModel->set_posX(planeJson["start_pos_x"].toInt());//200 + 100 * i);
-//            planeModel->set_posY(planeJson["start_pos_y"].toInt());//200 + 50 * i);
-
-//            planeModel->set_speed(planeJson["speed"].toDouble());
-//            planeModel->set_rotation(planeJson["rotation"].toDouble());
-
-//            planeModel->set_fuell(qrand() % planeJson["max_fuell"].toInt());
-//            planeModel->set_fuellMax(planeJson["max_fuell"].toInt());
-
-//            planeList()->addPlaneModel(planeModel);
-
-//            connect(planeModel, SIGNAL(planeDestroyed(int)), this, SLOT(onPlaneDestroyed(int)));
-//        }
-//    }
-
-//    if (planeList()->size() > 0) {
-//        set_selectedPlane(0);
-//        flagController()->set_selectedPlane(planeList()->get(selectedPlane()));
-//    }
 }
 
 bool cellCalculated = false;
 void AirportLogic::setCellSize()
 {
     if (!cellCalculated) {
-//        init();
         cellCalculated = true;
         cellSize = (1280 - 300) / 17;
 
@@ -158,7 +151,11 @@ void AirportLogic::checkCollisions()
                 airportGrid()->get(j)->set_touchedBy(QString::number(plane->id()));
 
                 int tileType = airportGrid()->get(j)->tileType();
-                if (tileType == AirportTileModel::TILE_TYPE_GRASS || tileType == AirportTileModel::TILE_TYPE_GRASS_2) {
+                if (tileType == AirportTileModel::TILE_TYPE_GRASS
+                        || tileType == AirportTileModel::TILE_TYPE_GRASS_2
+                        || tileType == AirportTileModel::TILE_TYPE_GRASS_3
+                        || tileType == AirportTileModel::TILE_TYPE_GRASS_4)
+                {
                     plane->goOnGrass(true);
                 } else if (tileType == AirportTileModel::TILE_TYPE_BUILDING) {
                     plane->hitBuilding();
@@ -193,7 +190,6 @@ int cnt = 0;
 void AirportLogic::spawn()
 {
 //    qDebug() << "void AirportLogic::spawn()";
-
     int spawnItem = qrand() % spawnList.size();
     SpawnPointModel* spawnPoint = spawnList.at(spawnItem);
 
@@ -204,13 +200,19 @@ void AirportLogic::spawn()
     planeModel->set_moveRotation(spawnPoint->moveRotation());
     planeModel->set_moveDirection(PlaneModel::MOVE_GO);
 
-    planeModel->set_speed(.5); // TODO
-    planeModel->set_rotation(.5); // TODO
+    PlaneConfigStruct planConfig = planeConfigList.at(qrand() % planeConfigList.size());
 
-    planeModel->set_fuell(10 + qrand() % 90); // TODO
-    planeModel->set_fuellMax(10 + 90); // TODO
+    planeModel->set_speedMulti(planConfig.speedMulti);
+    planeModel->set_speedMax(planConfig.speedMax);
+    planeModel->set_rotation(planConfig.rotation);
+
+    int halfMaxFuell = (int)(planConfig.maxFuell/2);
+    planeModel->set_fuell(halfMaxFuell + qrand() % halfMaxFuell);
+    planeModel->set_fuellMax(planConfig.maxFuell);
 
     planeModel->set_colorName(pallet.at(cnt % pallet.size()));
+    planeModel->set_planeName(planConfig.planeName);
+    planeModel->set_planeCrushedName(planConfig.planeCrushName);
 
     planeList()->addPlaneModel(planeModel);
 
@@ -250,8 +252,9 @@ void AirportLogic::saveMap()
 
 void AirportLogic::exit()
 {
-    qDebug() << "void AirportLogic::exit()";
-
+//    qDebug() << "void AirportLogic::exit()";
+    set_selectedPlane(-1);
+    flagController()->set_selectedPlane(nullptr);
     planeList()->clear();
     airportGrid()->clear();
 
@@ -259,6 +262,9 @@ void AirportLogic::exit()
         delete spawnList.at(i);
     }
     spawnList.clear();
+
+    score()->set_badScore(0);
+    score()->set_goodScore(0);
 
     isInited = false;
 }
@@ -290,7 +296,6 @@ void AirportLogic::changeSelectedPlane()
 {
     int maxCnt = planeList()->size();
 //    qDebug() << "AirportLogic::changeSelectedPlane()" << maxCnt;
-
     set_selectedPlane(selectedPlane() + 1);
     if (selectedPlane() >= planeList()->size()) {
         set_selectedPlane(0);

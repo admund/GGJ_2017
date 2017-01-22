@@ -28,9 +28,9 @@ GameScreen {
             anchors.centerIn: parent
 
             level: 2
-            imageName: "../../images/miasto_ilu_1.png"
-            buttonName: "../../images/miasto_name_1.png"
-            buttonHoverName: "../../images/miasto_name_1_hover.png"
+            imageName: "../../images/miasto_ilu_2.png"
+            buttonName: "../../images/miasto_name_2.png"
+            buttonHoverName: "../../images/miasto_name_2_hover.png"
         }
 
         ChooseMapElement {

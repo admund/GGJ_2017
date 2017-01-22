@@ -20,6 +20,8 @@ PlaneModel::PlaneModel(QObject* parent)
     , m_moveRotation(0)
 
     , m_speed(0)
+    , m_speedMulti(1)
+    , m_speedMax(0)
     , m_rotation(0)
 
     , m_isOnGrass(false)
@@ -27,6 +29,8 @@ PlaneModel::PlaneModel(QObject* parent)
     , m_fuellMax(0)
 
     , m_colorName("")
+    , m_planeName("")
+    , m_planeCrushedName("")
 {
 }
 
@@ -45,11 +49,18 @@ void PlaneModel::clear()
     set_moveDirection(MOVE_STOP);
     set_moveRotation(0);
 
+    set_speed(0);
+    set_speedMulti(1);
+    set_speedMax(0);
+    set_rotation(0);
+
     set_isOnGrass(false);
     set_fuell(0);
     set_fuellMax(0);
 
     set_colorName("");
+    set_planeName("");
+    set_planeCrushedName("");
 }
 
 #include <QDebug>
@@ -129,11 +140,10 @@ void PlaneModel::changeMoveDirection(int moveDirection)
     }
 }
 
-float maxSpeed = 1.5;//2;
 void PlaneModel::increaseSpeed(float deltaSpeed) {
-    set_speed(speed() + deltaSpeed);
-    if (speed() > maxSpeed) {
-        set_speed(maxSpeed);
+    set_speed(speed() + deltaSpeed * speedMulti());
+    if (speed() > speedMax()) {
+        set_speed(speedMax());
     } else if (speed() < 0) {
         set_speed(0);
     }
@@ -148,7 +158,7 @@ void PlaneModel::move(int deltaTime)
                 newRotation = newRotation - 360;
             }
             set_moveRotation(newRotation);
-            increaseSpeed(-.01f);
+            increaseSpeed(-.002f);
 
         } else if (moveDirection() == MOVE_LEFT) {
             double newRotation = moveRotation() - rotation();
@@ -156,7 +166,7 @@ void PlaneModel::move(int deltaTime)
                 newRotation = newRotation + 360;
             }
             set_moveRotation(newRotation);
-            increaseSpeed(-.01f);
+            increaseSpeed(-.002f);
 
         } else {
             increaseSpeed(.02f);
@@ -173,7 +183,7 @@ void PlaneModel::move(int deltaTime)
 
     lastFuellSubstraction += deltaTime;
     if ((isOnGrass() && lastFuellSubstraction > 500) || lastFuellSubstraction > 1000) {
-        set_fuell(fuell() - 1);
+        set_fuell(fuell() - 1); // TODO szybkosc spadania paliwa
         lastFuellSubstraction = 0;
 
         if (fuell() <= 0) {

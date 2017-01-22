@@ -32,6 +32,8 @@ class PlaneModel : public QObject
     AUTO_Q_PROPERTY(int, fuell)
     AUTO_Q_PROPERTY(int, fuellMax)
 
+    AUTO_Q_PROPERTY(QString, colorName)
+
 public:
     explicit PlaneModel(QObject* parent = 0);
 
@@ -58,6 +60,8 @@ signals:
     void checkPlaneControll(int planeId);
 
 private:
+    void increaseSpeed(float deltaSpeed);
+
     int lastFuellSubstraction = 0;
 };
 

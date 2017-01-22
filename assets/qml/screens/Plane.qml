@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 
 import "../views/Colors.js" as Colors
 import "../views/"
@@ -18,14 +19,26 @@ Rectangle {
     x: planModel.posX
     y: planModel.posY
 
-//    color: isSelected ? Colors.LightBlue : "#0000B000"
-
-    rotation: planModel.moveRotation
+    color: "#0000B000"
 
     Image {
+        id: planeImage
         anchors.fill: parent
 
+        rotation: planModel.moveRotation
+
+        smooth: true
+        visible: false
+
         source: "../../images/plane.png"
+    }
+
+    ColorOverlay {
+        anchors.fill: planeImage
+        source: planeImage
+        color: isSelected ? planModel.colorName : Colors.Black
+
+        rotation: planModel.moveRotation
     }
 
     Rectangle {
@@ -40,8 +53,6 @@ Rectangle {
             horizontalCenter: plane.horizontalCenter
             bottom: plane.top
         }
-
-        color: Colors.Red
 
         OpenSansText {
             id: fuellText
@@ -65,8 +76,20 @@ Rectangle {
     Timer {
         interval: deltaTime
         repeat: true
-        running: planModel.fuell > 0
+        running: planModel.isAlive
 
         onTriggered: planModel.move(deltaTime)
+    }
+
+    Timer {
+        id: scoredTimer
+
+        interval: 15
+        repeat: true
+        running: planModel.isScored
+
+        onTriggered: {
+            plane.scale += .01
+        }
     }
 }

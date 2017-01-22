@@ -25,6 +25,8 @@ PlaneModel::PlaneModel(QObject* parent)
     , m_isOnGrass(false)
     , m_fuell(0)
     , m_fuellMax(0)
+
+    , m_colorName("")
 {
 }
 
@@ -46,35 +48,34 @@ void PlaneModel::clear()
     set_isOnGrass(false);
     set_fuell(0);
     set_fuellMax(0);
+
+    set_colorName("");
 }
 
 #include <QDebug>
 void PlaneModel::hitBuilding()
 {
+//    qDebug() << "hitBuilding planeDestroyed";
     set_fuell(0);
     set_isAlive(false);
-
-//    qDebug() << "hitBuilding planeDestroyed";
     emit planeDestroyed(id());
 }
 
 void PlaneModel::goToSea()
 {
+//    qDebug() << "goToSea planeDestroyed";
     set_fuell(0);
     set_isAlive(false);
-//    qDebug() << "goToSea planeDestroyed";
     emit planeDestroyed(id());
 }
 
 void PlaneModel::goToRunwayStart()
 {
-    qDebug() << "void PlaneModel::goToRunwayStart()";
-    qDebug() << "canBeControlled()" << canBeControlled();
+//    qDebug() << "void PlaneModel::goToRunwayStart()";
     if (!canBeControlled() && !isUnload()) {
         set_canBeControlled(true);
         emit checkPlaneControll(id());
     } else {
-        qDebug() << "isUnload()" << isUnload();
         if (isUnload() && !isScored()) {
             set_canBeControlled(false);
             set_moveDirection(MOVE_GO);
@@ -89,16 +90,18 @@ void PlaneModel::goToRunwayStart()
 void PlaneModel::goToRamp() {
     qDebug() << "void PlaneModel::goToRamp()";
 
-    set_isUnload(true);
-    set_fuell(fuellMax());
+    if (isAlive()) {
+        set_isUnload(true);
+        set_fuell(fuellMax());
+    }
 }
 
 
 void PlaneModel::hitOtherPlane()
 {
+//    qDebug() << "hitOtherPlane planeDestroyed";
     set_fuell(0);
     set_isAlive(false);
-//    qDebug() << "hitOtherPlane planeDestroyed";
     emit planeDestroyed(id());
 }
 
@@ -126,6 +129,16 @@ void PlaneModel::changeMoveDirection(int moveDirection)
     }
 }
 
+float maxSpeed = 1.5;//2;
+void PlaneModel::increaseSpeed(float deltaSpeed) {
+    set_speed(speed() + deltaSpeed);
+    if (speed() > maxSpeed) {
+        set_speed(maxSpeed);
+    } else if (speed() < 0) {
+        set_speed(0);
+    }
+}
+
 void PlaneModel::move(int deltaTime)
 {
     if (moveDirection() != MOVE_STOP) {
@@ -135,6 +148,7 @@ void PlaneModel::move(int deltaTime)
                 newRotation = newRotation - 360;
             }
             set_moveRotation(newRotation);
+            increaseSpeed(-.01);
 
         } else if (moveDirection() == MOVE_LEFT) {
             double newRotation = moveRotation() - rotation();
@@ -142,42 +156,47 @@ void PlaneModel::move(int deltaTime)
                 newRotation = newRotation + 360;
             }
             set_moveRotation(newRotation);
+            increaseSpeed(-.01);
 
         } else {
-            double moveRotationInRadians = qDegreesToRadians((float)moveRotation());
-            float newPosX = speed() * qCos(moveRotationInRadians);
-            float newPosY = speed() * qSin(moveRotationInRadians);
-            set_posX(posX() + newPosX);
-            set_posY(posY() + newPosY);
+            increaseSpeed(.02f);
         }
+    } else {
+        increaseSpeed(-.04f);
+    }
 
-        lastFuellSubstraction += deltaTime;
-        if ((isOnGrass() && lastFuellSubstraction > 500) || lastFuellSubstraction > 1000) {
-            set_fuell(fuell() - 1);
-            lastFuellSubstraction = 0;
+    double moveRotationInRadians = qDegreesToRadians((float)moveRotation());
+    float newPosX = speed() * qCos(moveRotationInRadians);
+    float newPosY = speed() * qSin(moveRotationInRadians);
+    set_posX(posX() + newPosX);
+    set_posY(posY() + newPosY);
 
-            if (fuell() <= 0) {
-//                qDebug() << "if (fuell() <= 0) planeDestroyed";
-                emit planeDestroyed(id());
-            }
-        }
+    lastFuellSubstraction += deltaTime;
+    if ((isOnGrass() && lastFuellSubstraction > 500) || lastFuellSubstraction > 1000) {
+//        set_fuell(fuell() - 1); TODO odblokowac
+        lastFuellSubstraction = 0;
 
-        if (posX() < -200 || posX() > 1500) {
-            set_fuell(0);
+        if (fuell() <= 0) {
             set_isAlive(false);
-//            qDebug() << "posX() < -200 || posX() > 1500 planeDestroyed";
             if (!isScored()) {
                 emit planeDestroyed(id());
             }
         }
+    }
 
-        if (posY() < -200 || posY() > 1000) {
-            set_fuell(0);
-            set_isAlive(false);
-//            qDebug() << "(posY() < -200 || posY() > 1000) planeDestroyed";
-            if (!isScored()) {
-                emit planeDestroyed(id());
-            }
+    if (posX() < -200 || posX() > 1500) {
+        set_fuell(0);
+        set_isAlive(false);
+        if (!isScored()) {
+            emit planeDestroyed(id());
+        }
+    }
+
+    if (posY() < -200 || posY() > 1000) {
+        set_fuell(0);
+        set_isAlive(false);
+        if (!isScored()) {
+            emit planeDestroyed(id());
         }
     }
 }

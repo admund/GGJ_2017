@@ -38,6 +38,11 @@ bool Spinacz::eventFilter(QObject *watched, QEvent *event)
             root()->airportLogic()->changeSelectedPlane();
             return true;
         }
+
+        if (keyEvent->key() == Qt::Key_S) {
+            root()->airportLogic()->spawn();
+            return true;
+        }
     }
 
     return false;

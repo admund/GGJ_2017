@@ -97,16 +97,14 @@ GameScreen {
     Repeater {
         model: airportLogic.planeList
 
-        delegate: Item {
-            Plane {
+        delegate: Plane {
                 id: plane
                 planModel: planeModelRole
 
                 isSelected: airportLogic.selectedPlane === index
 
                 }
-
-//                              TODO collider samolotu
+//     TODO collider samolotu
 //            Rectangle {
 //                x: plane.x
 //                y: plane.y
@@ -115,14 +113,14 @@ GameScreen {
 //                radius: width/2
 
 //                color: Colors.Yellow
-//            }
-            }
     }
 
     FlagController {
         id: flagController
 
         width: 300
+
+        flagControllerLogic: airportLogic.flagController
 
         anchors {
             top: parent.top
@@ -181,22 +179,6 @@ GameScreen {
             airportLogic.spawn()
         }
     }
-
-//    function getTile(tileType) {
-//        if (tileType === 1) {
-//            return Colors.Gray
-//        } else if (tileType === 2) {
-//            return Colors.White
-//        } else if (tileType === 3) {
-//            return Colors.Blue
-//        } else if (tileType === 4) {
-//            return Colors.Yellow
-//        } else if (tileType === 5) {
-//            return Colors.Red
-//        } else {
-//            return Colors.DarkGreen;
-//        }
-//    }
 
     function getTile(tileType) {
         if (tileType === 1) {

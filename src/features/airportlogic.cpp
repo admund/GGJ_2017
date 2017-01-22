@@ -18,6 +18,14 @@ AirportLogic::AirportLogic(QObject* parent)
     , m_flagController(new FlagControllerLogic(this))
     , m_score(new ScoreModel(this))
 {
+    pallet.append(QString("#e92f18"));
+    pallet.append(QString("#1c195b"));
+    pallet.append(QString("#ff6e00"));
+    pallet.append(QString("#ff6640"));
+    pallet.append(QString("#4e5fb4"));
+    pallet.append(QString("#ffc747"));
+    pallet.append(QString("#478052"));
+    pallet.append(QString("#2ca67f"));
 }
 
 void getStringFromFile(const QString& fileName, QString& data) {
@@ -27,6 +35,9 @@ void getStringFromFile(const QString& fileName, QString& data) {
     data = QString(file.readAll());
 }
 
+const QString path("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\");
+//const QString path("json\\");
+
 #include <QDebug>
 void AirportLogic::init()
 {
@@ -35,7 +46,7 @@ void AirportLogic::init()
     qsrand(QDateTime::currentMSecsSinceEpoch());
 
     QString levelData("");
-    const QString fileNameLevel(("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\level_") + QString::number(1) + QString(".json"));
+    const QString fileNameLevel(path + QString("level_") + QString::number(1) + QString(".json"));
     getStringFromFile(fileNameLevel, levelData);
 
     QJsonObject gridObj;
@@ -54,7 +65,7 @@ void AirportLogic::init()
     }
 
     QString spawnsData("");
-    const QString fileNameSpawns(("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\spawns_level_") + QString::number(1) + QString(".json"));
+    const QString fileNameSpawns(path + QString("spawns_level_") + QString::number(1) + QString(".json"));
     getStringFromFile(fileNameSpawns, spawnsData);
 
     QJsonObject spawnsObj;
@@ -74,7 +85,7 @@ void AirportLogic::init()
     }
 
 //    QString planesData("");
-//    const QString fileNamePlanes(("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\planes_level_") + QString::number(1) + QString(".json"));
+//    const QString fileNamePlanes(path + QString(planes_level_") + QString::number(1) + QString(".json"));
 //    getStringFromFile(fileNamePlanes, planesData);
 
 //    QJsonObject planesObj;
@@ -180,7 +191,7 @@ void AirportLogic::checkCollisions()
 int cnt = 0;
 void AirportLogic::spawn()
 {
-    qDebug() << "void AirportLogic::spawn()";
+//    qDebug() << "void AirportLogic::spawn()";
 
     int spawnItem = qrand() % spawnList.size();
     SpawnPointModel* spawnPoint = spawnList.at(spawnItem);
@@ -198,12 +209,15 @@ void AirportLogic::spawn()
     planeModel->set_fuell(10 + qrand() % 90); // TODO
     planeModel->set_fuellMax(10 + 90); // TODO
 
+    planeModel->set_colorName(pallet.at(cnt % pallet.size()));
+
     planeList()->addPlaneModel(planeModel);
 
     connect(planeModel, SIGNAL(planeDestroyed(int)), this, SLOT(onPlaneDestroyed(int)));
     connect(planeModel, SIGNAL(checkPlaneControll(int)), this, SLOT(onCheckPlaneControll(int)));
     connect(planeModel, SIGNAL(planeGoAway()), score(), SLOT(onPlaneGoAway()));
     connect(planeModel, SIGNAL(planeDestroyed(int)), score(), SLOT(onPlaneDestroyed(int)));
+    connect(planeModel, SIGNAL(planeGoAway()), flagController(), SLOT(onPlaneGoAway()));
 
     cnt++;
 }
@@ -224,7 +238,7 @@ void AirportLogic::saveMap()
         QJsonDocument doc(obj);
         QString strJson(doc.toJson(QJsonDocument::Compact));
 
-        QString filename(QString("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\level_") + QString::number(QDateTime::currentMSecsSinceEpoch()) + QString(".json"));
+        QString filename(path + QString("level_") + QString::number(QDateTime::currentMSecsSinceEpoch()) + QString(".json"));
         QFile file(filename);
         if (file.open(QIODevice::ReadWrite)) {
             QTextStream stream(&file);
@@ -243,8 +257,7 @@ void AirportLogic::onPlaneDestroyed(int planeId)
 
 void AirportLogic::onCheckPlaneControll(int planeId)
 {
-    qDebug() << "void AirportLogic::onCheckPlaneControll(int planeId)" << planeId;
-    qDebug() << "selectedPlane()" << selectedPlane();
+//    qDebug() << "void AirportLogic::onCheckPlaneControll(int planeId)" << planeId;
     if (selectedPlane() == -1 || selectedPlane() == planeId) {
         changeSelectedPlane();
     }

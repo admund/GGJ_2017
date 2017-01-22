@@ -1,12 +1,14 @@
 import QtQuick 2.0
 
 import "../views/Colors.js" as Colors
+import "../views"
 
 Item {
     id: root
     width: 300
 
     property QtObject planeModel
+    property QtObject flagControllerLogic
 
     property bool isRightFlagUp: planeModel ? planeModel.isRightFlagUp : false
     property bool isLeftFlagUp: planeModel ? planeModel.isLeftFlagUp : false
@@ -48,13 +50,33 @@ Item {
             right: parent.right
         }
 
-//        color: "#1C195B"
-//        color: "#478052"
-        color: "#ff6e00"
+        color: planeModel ? planeModel.colorName : "#ff6e00"
 
         Image {
             anchors.fill: parent
             source: getFlagImg()
+        }
+
+        OpenSansText {
+            height: 20
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            text: "Great Job!"
+
+            color: "#e92f18"
+
+            font.pointSize: 40
+
+            visible: flagControllerLogic.greatJobTime % 300 > 100
+
+            Timer {
+                interval: 10
+                running: flagControllerLogic.greatJobTime > 0
+                repeat: true
+                onTriggered: {
+                    flagControllerLogic.greatJobTime = flagControllerLogic.greatJobTime - 10
+                }
+            }
         }
     }
 

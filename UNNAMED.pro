@@ -41,7 +41,6 @@ SOURCES += src/main.cpp \
 
 RESOURCES += assets/qml/_qml.qrc \
     assets/fonts/_fonts.qrc \
-#    assets/translations/_translations.qrc \
     assets/tests/_tests.qrc \
     assets/fakes/_fakes.qrc \
     assets/images/_images_xx.qrc

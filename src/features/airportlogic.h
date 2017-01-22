@@ -42,6 +42,7 @@ private:
     int cellSize = 0;
     QList<QRect> gridRects;
     QList<SpawnPointModel*> spawnList;
+    QVector<QString> pallet;
 };
 
 #endif // AIRPORTLOGIC_H

@@ -40,9 +40,10 @@ public:
     Q_INVOKABLE void changeMoveDirection(int moveDirection);
     Q_INVOKABLE void changeSelectedPlane();
     Q_INVOKABLE void spawn();
+    Q_INVOKABLE void exit();
+    Q_INVOKABLE void playAgain(int levelId);
 
     void saveMap();
-    void exit();
 
 private slots:
     void init(int levelId);

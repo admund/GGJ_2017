@@ -4,6 +4,7 @@ import QtQuick 2.7
 import "../views/Colors.js" as Colors
 import "../appStructure"
 import "../views"
+import ".."
 
 GameScreen {
     id: airportSCreen
@@ -137,6 +138,13 @@ GameScreen {
         skillsLogic: airportLogic.skills
     }
 
+    WinLoosePopUp {
+        anchors.fill: airportGrid
+
+        showLoose: _logic.airportLogic.score.badScore > 4
+        showWin: _logic.airportLogic.score.goodScore > 2
+    }
+
     OpenSansText {
         id: goodScore
 
@@ -155,6 +163,40 @@ GameScreen {
         anchors.top: goodScore.bottom
 
         text: "Bad Score: " + airportLogic.score.badScore
+    }
+
+    Rectangle {
+        id: exitButton
+        width: 50
+        height: 50
+
+        color: Colors.Transparent
+
+        anchors {
+            right: flagController.left
+            top: parent.top
+        }
+
+        Image {
+            id: name
+
+            width: 50
+            height: 50
+
+            anchors.fill: parent
+
+            source: backMouse.containsMouse ? "../../images/button_back_hover.png" : "../../images/button_back.png"
+        }
+
+        MouseArea {
+            id: backMouse
+            anchors.fill: parent
+            hoverEnabled: true
+            onClicked: {
+                _logic.showAirport = false
+                airportLogic.exit()
+            }
+        }
     }
 
     Rectangle {
@@ -182,9 +224,20 @@ GameScreen {
     }
 
     Timer {
+        id: spawnTimer1
+        interval: 0
+        repeat: false
+        running: _logic.showAirport
+
+        onTriggered: {
+            airportLogic.spawn()
+        }
+    }
+
+    Timer {
         id: spawnTimer
-        interval: 0//20000
-        repeat: false//true
+        interval: 30000 // TODO CONFIG!!!
+        repeat: true
         running: _logic.showAirport
 
         onTriggered: {

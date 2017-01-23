@@ -274,6 +274,13 @@ void AirportLogic::exit()
     isInited = false;
 }
 
+void AirportLogic::playAgain(int levelNr)
+{
+    exit();
+    init(levelNr);
+    spawn();
+}
+
 void AirportLogic::onPlaneDestroyed(int planeId)
 {
 //    qDebug() << "void AirportLogic::onPlaneDestroyed(int planeId)" << planeId;

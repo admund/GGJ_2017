@@ -26,5 +26,6 @@
         <file>screens/ChooseMapElement.qml</file>
         <file>screens/SkillsPanel.qml</file>
         <file>screens/DropPowerUp.qml</file>
+        <file>WinLoosePopUp.qml</file>
     </qresource>
 </RCC>

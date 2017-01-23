@@ -151,7 +151,7 @@ Rectangle {
 
         interval: 15
         repeat: true
-        running: planModel ? planModel.isScored : false
+        running: planModel ? planModel.isScored && planModel.isAlive : false
 
         onTriggered: {
             plane.scale += .01

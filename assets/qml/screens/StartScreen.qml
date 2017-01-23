@@ -1,8 +1,10 @@
 import QtQuick 2.0
+import QtMultimedia 5.5
 
 import "../appStructure"
 
 GameScreen {
+
     Image {
         anchors.fill: parent
 
@@ -34,4 +36,32 @@ GameScreen {
             }
         }
     }
+
+    SoundEffect {
+        id: playSound3
+        loops: -2 // INF
+//        source: "../../fonts/bezpieczne_parkowanie_1.wav"
+        source: "../../fonts/main_theme.wav"
+
+        onLoadedChanged: {
+            print("onLoadedChanged 3")
+            playSound3.play()
+        }
+    }
+
+//    Rectangle {
+//        width: 50
+//        height: 50
+
+//        color: "#436633"
+
+//        MouseArea {
+//            anchors.fill: parent
+
+//            onClicked: {
+//                print("playSound 2")
+//                playSound3.play()
+//            }
+//        }
+//    }
 }

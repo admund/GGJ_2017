@@ -58,7 +58,7 @@ private:
 
     bool isInited = false;
     int cellSize = 0;
-    QList<QRect> gridRects;
+    QList<QRect*> gridRects;
     QList<SpawnPointModel*> spawnList;
     QVector<QString> pallet;
     QVector<PlaneConfigStruct> planeConfigList;

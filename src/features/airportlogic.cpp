@@ -29,8 +29,9 @@ AirportLogic::AirportLogic(QObject* parent)
     loadPlanesConfig();
 }
 
-const QString path("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\");
+//const QString path("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\");
 //const QString path("json\\");
+const QString path("/Users/adrian-gardian/Projects/GGJ_2017/json/");
 
 void getStringFromFile(const QString& fileName, QString& data) {
     QString filename(fileName);
@@ -122,7 +123,7 @@ void AirportLogic::setCellSize()
 
         for (int j=0; j<12; j++) {
             for (int i=0; i<17; i++) {
-                QRect grid(i * cellSize, j * cellSize, cellSize, cellSize);
+                QRect* grid = new QRect(i * cellSize, j * cellSize, cellSize, cellSize);
                 gridRects.append(grid);
             }
         }
@@ -147,7 +148,7 @@ void AirportLogic::checkCollisions()
 
         for (int j=0; j<gridRects.size(); j++) {
 
-            bool intersect = gridRects.at(j).intersects(planeRect);
+            bool intersect = gridRects.at(j)->intersects(planeRect);
             if (intersect) {
                 airportGrid()->get(j)->set_touchedBy(QString::number(plane->id()));
 

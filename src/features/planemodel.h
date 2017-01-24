@@ -41,8 +41,8 @@ class PlaneModel : public QObject
 public:
     explicit PlaneModel(QObject* parent = 0);
 
-    static const int MOVE_RIGHT = 0;
-    static const int MOVE_LEFT = 1;
+    static const int MOVE_LEFT = 0;
+    static const int MOVE_RIGHT = 1;
     static const int MOVE_GO = 2;
     static const int MOVE_STOP = 3;
 
@@ -51,7 +51,7 @@ public:
     void changeMoveDirection(int moveDirection);
     void hitBuilding();
     void goToSea();
-    void goToRunwayStart();
+    bool goToRunwayStart();
     void goToRamp();
     void hitOtherPlane();
     void goOnGrass(bool isTrue);

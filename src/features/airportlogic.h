@@ -26,6 +26,10 @@ class AirportLogic : public QObject
 
     AUTO_Q_PROPERTY(bool, editMode)
     AUTO_Q_PROPERTY(int, selectedPlane)
+    AUTO_Q_PROPERTY(bool, playCrashSound)
+    AUTO_Q_PROPERTY(bool, playLoadupSound)
+    AUTO_Q_PROPERTY(bool, playFlyawaySound)
+
     AUTO_Q_PROPERTY(AirportGridModel*, airportGrid)
     AUTO_Q_PROPERTY(PlaneListModel*, planeList)
     AUTO_Q_PROPERTY(FlagControllerLogic*, flagController)

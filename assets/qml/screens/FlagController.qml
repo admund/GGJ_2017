@@ -13,8 +13,9 @@ Item {
     property bool isRightFlagUp: planeModel ? planeModel.isRightFlagUp : false
     property bool isLeftFlagUp: planeModel ? planeModel.isLeftFlagUp : false
 
-    Image {
+    Rectangle {
         id: mapImage
+
         height: 107
         width: root.width
 
@@ -22,7 +23,12 @@ Item {
             right: parent.right
         }
 
-        source: "../../images/miasto_name_" + _logic.loadinglevelId + ".png" // TODO haczor
+        Image {
+//            id: mapImage
+            anchors.fill: parent
+
+            source: "../../images/miasto_name_" + _logic.loadinglevelId + ".png" // TODO haczor
+        }
     }
 
     SkillsPanel {

@@ -13,6 +13,10 @@ AirportLogic::AirportLogic(QObject* parent)
     : QObject(parent)
     , m_editMode(false)
     , m_selectedPlane(-1)
+    , m_playCrashSound(false)
+    , m_playLoadupSound(false)
+    , m_playFlyawaySound(false)
+
     , m_airportGrid(new AirportGridModel(this))
     , m_planeList(new PlaneListModel(this))
     , m_flagController(new FlagControllerLogic(this))
@@ -160,12 +164,19 @@ void AirportLogic::checkCollisions()
                     plane->goOnGrass(true);
                 } else if (tileType == AirportTileModel::TILE_TYPE_BUILDING) {
                     plane->hitBuilding();
+                    set_playCrashSound(true);
                 } else if (tileType == AirportTileModel::TILE_TYPE_SEA) {
                     plane->goToSea();
+                    set_playCrashSound(true);
                 } else if (tileType == AirportTileModel::TILE_TYPE_RUNWAY_START) {
-                    plane->goToRunwayStart();
+                    if (plane->goToRunwayStart()) {
+                        set_playFlyawaySound(true);
+                    }
                 } else if (tileType == AirportTileModel::TILE_TYPE_RAMP) {
-                    plane->goToRamp();
+                    if (!plane->isUnload()) {
+                        set_playLoadupSound(true);
+                        plane->goToRamp();
+                    }
                 }
             }
         }
@@ -177,9 +188,11 @@ void AirportLogic::checkCollisions()
                 if (planeSecRect.intersects(planeRect)) {
                     if (plane->isAlive()) {
                         plane->hitOtherPlane();
+                        set_playCrashSound(true);
                     }
                     if (planeSec->isAlive()) {
                         planeSec->hitOtherPlane();
+                        set_playCrashSound(true);
                     }
                 }
             }

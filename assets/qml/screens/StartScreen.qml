@@ -40,7 +40,6 @@ GameScreen {
     SoundEffect {
         id: playSound3
         loops: -2 // INF
-//        source: "../../fonts/bezpieczne_parkowanie_1.wav"
         source: "../../fonts/main_theme.wav"
 
         onLoadedChanged: {
@@ -48,20 +47,4 @@ GameScreen {
             playSound3.play()
         }
     }
-
-//    Rectangle {
-//        width: 50
-//        height: 50
-
-//        color: "#436633"
-
-//        MouseArea {
-//            anchors.fill: parent
-
-//            onClicked: {
-//                print("playSound 2")
-//                playSound3.play()
-//            }
-//        }
-//    }
 }

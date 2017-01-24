@@ -67,20 +67,20 @@ void PlaneModel::clear()
 void PlaneModel::hitBuilding()
 {
 //    qDebug() << "hitBuilding planeDestroyed";
-    set_fuell(0);
     set_isAlive(false);
+    set_fuell(0);
     emit planeDestroyed(id());
 }
 
 void PlaneModel::goToSea()
 {
 //    qDebug() << "goToSea planeDestroyed";
-    set_fuell(0);
     set_isAlive(false);
+    set_fuell(0);
     emit planeDestroyed(id());
 }
 
-void PlaneModel::goToRunwayStart()
+bool PlaneModel::goToRunwayStart()
 {
 //    qDebug() << "void PlaneModel::goToRunwayStart()";
     if (!canBeControlled() && !isUnload()) {
@@ -94,8 +94,12 @@ void PlaneModel::goToRunwayStart()
 
             set_isScored(true);
             emit planeGoAway();
+
+            return true;
         }
     }
+
+    return false;
 }
 
 void PlaneModel::goToRamp() {
@@ -111,8 +115,8 @@ void PlaneModel::goToRamp() {
 void PlaneModel::hitOtherPlane()
 {
 //    qDebug() << "hitOtherPlane planeDestroyed";
-    set_fuell(0);
     set_isAlive(false);
+    set_fuell(0);
     emit planeDestroyed(id());
 }
 

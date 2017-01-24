@@ -1,5 +1,6 @@
 import QtQuick.Controls 2.0
 import QtQuick 2.7
+import QtMultimedia 5.5
 
 import "../views/Colors.js" as Colors
 import "../appStructure"
@@ -8,6 +9,54 @@ import ".."
 
 GameScreen {
     id: airportSCreen
+
+    SoundEffect {
+        id: crashSound
+        loops: 1
+        source: "../../fonts/wypadek_1.wav"
+    }
+
+    Timer {
+        interval: 1
+        running: _logic.airportLogic.playCrashSound
+        repeat: true
+        onTriggered: {
+            _logic.airportLogic.playCrashSound = false
+            crashSound.play()
+        }
+    }
+
+    SoundEffect {
+        id: loadupSound
+        loops: 1
+        source: "../../fonts/loadup_1.wav"
+    }
+
+    Timer {
+        interval: 1
+        running: _logic.airportLogic.playLoadupSound
+        repeat: true
+        onTriggered: {
+            _logic.airportLogic.playLoadupSound = false
+            loadupSound.play()
+        }
+    }
+
+    SoundEffect {
+        id: flyawaySound
+        loops: 1
+        source: "../../fonts/wylot_1.wav"
+    }
+
+    Timer {
+        interval: 1
+        running: _logic.airportLogic.playFlyawaySound
+        repeat: true
+        onTriggered: {
+            _logic.airportLogic.playFlyawaySound = false
+            flyawaySound.play()
+        }
+    }
 
     property QtObject airportLogic: _logic.airportLogic
 
@@ -44,15 +93,6 @@ GameScreen {
                 anchors.centerIn: parent
 
                 rotation: airportGridModelRole.tileRotation
-
-//                OpenSansText {
-//                    anchors.fill: parent
-//                    anchors.centerIn: parent
-
-//                    text: airportGridModelRole.touchedBy
-
-//                    color: Colors.Black
-//                }
 
                 source: getTile(airportGridModelRole.tileType)
             }

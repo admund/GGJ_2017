@@ -84,7 +84,7 @@ Rectangle {
 
         visible: showLoose
 
-        source: "../images/popup_win.png"
+        source: "../images/popup_lose.png"
 
         Image {
             id: loosePlayAgainButton

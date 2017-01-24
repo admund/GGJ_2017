@@ -3,5 +3,7 @@
         <file>open_sans_cond_bold.ttf</file>
         <file>main_theme.wav</file>
         <file>wypadek_1.wav</file>
+        <file>loadup_1.wav</file>
+        <file>wylot_1.wav</file>
     </qresource>
 </RCC>

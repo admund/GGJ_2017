@@ -69,13 +69,13 @@ Rectangle {
             top: plane.bottom
         }
 
-        OpenSansText {
-            id: fuellText
+//        OpenSansText {
+//            id: fuellText
 
-            anchors.centerIn: parent
-            text: planModel ? planModel.fuell + "/" + planModel.fuellMax : ""
-            font.pointSize: 8
-        }
+//            anchors.centerIn: parent
+//            text: planModel ? planModel.fuell + "/" + planModel.fuellMax : ""
+//            font.pointSize: 8
+//        }
     }
 
     Image {

@@ -253,6 +253,22 @@ GameScreen {
         }
     }
 
+    Rectangle {
+        id: clearButton
+        width: 10
+        height: 10
+
+        anchors.top: magicButton.bottom
+
+        color: airportLogic.editMode ? Colors.Red : Colors.Transparent
+
+        MouseArea {
+            anchors.fill: parent
+
+            onClicked: airportLogic.clearMap()
+        }
+    }
+
     Timer {
         interval: 100
         repeat: true
@@ -278,7 +294,7 @@ GameScreen {
         id: spawnTimer
         interval: 30000 // TODO CONFIG!!!
         repeat: true
-        running: _logic.showAirport
+        running: !airportLogic.editMode && _logic.showAirport
 
         onTriggered: {
             airportLogic.spawn()

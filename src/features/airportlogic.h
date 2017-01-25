@@ -47,6 +47,7 @@ public:
     Q_INVOKABLE void exit();
     Q_INVOKABLE void playAgain(int levelId);
 
+    Q_INVOKABLE void clearMap();
     void saveMap();
 
 private slots:

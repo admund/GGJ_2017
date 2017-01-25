@@ -33,8 +33,8 @@ AirportLogic::AirportLogic(QObject* parent)
     loadPlanesConfig();
 }
 
-const QString path("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\");
-//const QString path("json\\");
+//const QString path("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\");
+const QString path("json\\");
 
 void getStringFromFile(const QString& fileName, QString& data) {
     QString filename(fileName);
@@ -72,6 +72,14 @@ void AirportLogic::loadPlanesConfig()
     }
 }
 
+float spawnPosX(int i, int cellSize) {
+    return (i % 17) * cellSize;
+}
+
+float spawnPosY(int i, int cellSize) {
+    return (int)(i / 17) * cellSize;
+}
+
 void AirportLogic::init(int levelNr)
 {
     qDebug() << "void AirportLogic::init()" << levelNr;
@@ -80,6 +88,8 @@ void AirportLogic::init(int levelNr)
     QString levelData("");
     const QString fileNameLevel(path + QString("level_") + QString::number(levelNr) + QString(".json"));
     getStringFromFile(fileNameLevel, levelData);
+
+    cellSize = (1280 - 300) / 17;
 
     QJsonObject gridObj;
     if (JsonHelpers::jsonObjectFromString(levelData, gridObj)) {
@@ -93,26 +103,41 @@ void AirportLogic::init(int levelNr)
             airportTileModel->set_tileRotation(tile["tile_rotation"].toInt());
 
             airportGrid()->addAirportTile(airportTileModel);
-        }
-    }
 
-    QString spawnsData("");
-    const QString fileNameSpawns(path + QString("spawns_level_") + QString::number(levelNr) + QString(".json"));
-    getStringFromFile(fileNameSpawns, spawnsData);
+            if (airportTileModel->tileType() == AirportTileModel::TILE_TYPE_RUNWAY_START) {
+                int spawnPosX_ = 0;
+                int spawnPosY_ = 0;
+                int spawnRotation_ = 0;
+                switch (airportTileModel->tileRotation()) {
+                    case 0:
+                        spawnPosX_ = spawnPosX(i, cellSize) - cellSize * 3;
+                        spawnPosY_ = spawnPosY(i, cellSize) + cellSize / 2;
 
-    QJsonObject spawnsObj;
-    if (JsonHelpers::jsonObjectFromString(spawnsData, spawnsObj)) {
-        QJsonArray spawns = spawnsObj["spawns"].toArray();
-//        qDebug() << "spawns" << spawns.size();
-        for (int i=0; i<spawns.size(); i++) {
-            QJsonObject spawnJson = spawns.at(i).toObject();
+                        break;
+                    case 90:
+                        spawnPosX_ = spawnPosX(i, cellSize) + cellSize / 2;
+                        spawnPosY_ = spawnPosY(i, cellSize) - cellSize * 3;
+                        spawnRotation_ = 90;
+                        break;
+                    case 180:
+                        spawnPosX_ = spawnPosX(i, cellSize) + cellSize * 3;
+                        spawnPosY_ = spawnPosY(i, cellSize) + cellSize / 2;
+                        spawnRotation_ = 180;
+                        break;
+                    case 270:
+                        spawnPosX_ = spawnPosX(i, cellSize) + cellSize / 2;
+                        spawnPosY_ = spawnPosY(i, cellSize) + cellSize * 3;
+                        spawnRotation_ = 270;
+                        break;
+                }
 
-            SpawnPointModel* spawnPointModel = new SpawnPointModel(this);
-            spawnPointModel->set_posX(spawnJson["pos_x"].toInt());
-            spawnPointModel->set_posY(spawnJson["pos_y"].toInt());
-            spawnPointModel->set_moveRotation(spawnJson["move_rotation"].toInt());
+                SpawnPointModel* spawnPointModel = new SpawnPointModel(this);
+                spawnPointModel->set_posX(spawnPosX_);
+                spawnPointModel->set_posY(spawnPosY_);
+                spawnPointModel->set_moveRotation(spawnRotation_);
 
-            spawnList.append(spawnPointModel);
+                spawnList.append(spawnPointModel);
+            }
         }
     }
 }
@@ -239,31 +264,6 @@ void AirportLogic::spawn()
     cnt++;
 }
 
-void AirportLogic::saveMap()
-{
-    if (editMode()) {
-        QJsonObject obj;
-        QJsonArray tileArray;
-        for (int i=0; i<airportGrid()->size(); i++) {
-            QJsonObject grid;
-            grid.insert("tile_type", airportGrid()->get(i)->tileType());
-            grid.insert("tile_rotation", airportGrid()->get(i)->tileRotation());
-            tileArray.append(grid);
-        }
-        obj.insert("grid", tileArray);
-
-        QJsonDocument doc(obj);
-        QString strJson(doc.toJson(QJsonDocument::Compact));
-
-        QString filename(path + QString("level_") + QString::number(QDateTime::currentMSecsSinceEpoch()) + QString(".json"));
-        QFile file(filename);
-        if (file.open(QIODevice::ReadWrite)) {
-            QTextStream stream(&file);
-            stream << strJson << endl;
-        }
-    }
-}
-
 void AirportLogic::exit()
 {
 //    qDebug() << "void AirportLogic::exit()";
@@ -294,6 +294,39 @@ void AirportLogic::playAgain(int levelNr)
     spawn();
 }
 
+void AirportLogic::clearMap()
+{
+    for (int i=0; i<airportGrid()->size(); i++) {
+        airportGrid()->get(i)->set_tileType(0);
+        airportGrid()->get(i)->set_tileRotation(0);
+    }
+}
+
+void AirportLogic::saveMap()
+{
+    if (editMode()) {
+        QJsonObject obj;
+        QJsonArray tileArray;
+        for (int i=0; i<airportGrid()->size(); i++) {
+            QJsonObject grid;
+            grid.insert("tile_type", airportGrid()->get(i)->tileType());
+            grid.insert("tile_rotation", airportGrid()->get(i)->tileRotation());
+            tileArray.append(grid);
+        }
+        obj.insert("grid", tileArray);
+
+        QJsonDocument doc(obj);
+        QString strJson(doc.toJson(QJsonDocument::Compact));
+
+        QString filename(path + QString("level_") + QString::number(QDateTime::currentMSecsSinceEpoch()) + QString(".json"));
+        QFile file(filename);
+        if (file.open(QIODevice::ReadWrite)) {
+            QTextStream stream(&file);
+            stream << strJson << endl;
+        }
+    }
+}
+
 void AirportLogic::onPlaneDestroyed(int planeId)
 {
 //    qDebug() << "void AirportLogic::onPlaneDestroyed(int planeId)" << planeId;
@@ -312,8 +345,7 @@ void AirportLogic::onCheckPlaneControll(int planeId)
 
 void AirportLogic::onSpeedUpSkill()
 {
-    qDebug() << "void AirportLogic::onSpeedUpSkill()";
-
+//    qDebug() << "void AirportLogic::onSpeedUpSkill()";
     if (selectedPlane() != -1) {
         PlaneModel* plane = planeList()->get(selectedPlane());
         plane->set_speedMax(plane->speedMax() * 2);
@@ -322,7 +354,7 @@ void AirportLogic::onSpeedUpSkill()
 
 void AirportLogic::onFuelSkill()
 {
-    qDebug() << "void AirportLogic::onFuelSkill()";
+//    qDebug() << "void AirportLogic::onFuelSkill()";
     if (selectedPlane() != -1) {
         PlaneModel* plane = planeList()->get(selectedPlane());
         plane->set_fuell(plane->fuellMax());
@@ -331,7 +363,7 @@ void AirportLogic::onFuelSkill()
 
 void AirportLogic::onDoubleSkill()
 {
-    qDebug() << "void AirportLogic::onDoubleSkill()";
+//    qDebug() << "void AirportLogic::onDoubleSkill()";
     onSpeedUpSkill();
     onFuelSkill();
 }

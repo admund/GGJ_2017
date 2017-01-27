@@ -26,6 +26,10 @@ class AirportLogic : public QObject
 
     AUTO_Q_PROPERTY(bool, editMode)
     AUTO_Q_PROPERTY(int, selectedPlane)
+    AUTO_Q_PROPERTY(bool, playCrashSound)
+    AUTO_Q_PROPERTY(bool, playLoadupSound)
+    AUTO_Q_PROPERTY(bool, playFlyawaySound)
+
     AUTO_Q_PROPERTY(AirportGridModel*, airportGrid)
     AUTO_Q_PROPERTY(PlaneListModel*, planeList)
     AUTO_Q_PROPERTY(FlagControllerLogic*, flagController)
@@ -40,9 +44,11 @@ public:
     Q_INVOKABLE void changeMoveDirection(int moveDirection);
     Q_INVOKABLE void changeSelectedPlane();
     Q_INVOKABLE void spawn();
+    Q_INVOKABLE void exit();
+    Q_INVOKABLE void playAgain(int levelId);
 
+    Q_INVOKABLE void clearMap();
     void saveMap();
-    void exit();
 
 private slots:
     void init(int levelId);

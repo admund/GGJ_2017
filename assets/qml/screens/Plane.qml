@@ -57,26 +57,26 @@ Rectangle {
         source: "../../images/flaga_1.png"
     }
 
-    Rectangle {
-        width: fuellText.width
-        height: 10
-        radius: 3
+//    Rectangle {
+//        width: fuellText.width
+//        height: 10
+//        radius: 3
 
-        visible: planModel ? planModel.isAlive : false
+//        visible: planModel ? planModel.isAlive : false
 
-        anchors {
-            horizontalCenter: plane.horizontalCenter
-            top: plane.bottom
-        }
+//        anchors {
+//            horizontalCenter: plane.horizontalCenter
+//            top: plane.bottom
+//        }
 
-        OpenSansText {
-            id: fuellText
+//        OpenSansText {
+//            id: fuellText
 
-            anchors.centerIn: parent
-            text: planModel ? planModel.fuell + "/" + planModel.fuellMax : ""
-            font.pointSize: 8
-        }
-    }
+//            anchors.centerIn: parent
+//            text: planModel ? planModel.fuell + "/" + planModel.fuellMax : ""
+//            font.pointSize: 8
+//        }
+//    }
 
     Image {
         id: fuellIdicator
@@ -151,7 +151,7 @@ Rectangle {
 
         interval: 15
         repeat: true
-        running: planModel ? planModel.isScored : false
+        running: planModel ? planModel.isScored && planModel.isAlive : false
 
         onTriggered: {
             plane.scale += .01

@@ -6,7 +6,7 @@ Item {
     property QtObject skillsLogic
 
     property int dropedSkill: -1 // 0 - fuel, 1 - speedUp, 2 - double
-    property int dropedTime: 15000 //15s
+    property int dropedTime: 20000 //20
     property int moveDownSpeed: 2
 
     Timer {

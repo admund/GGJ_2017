@@ -1,8 +1,10 @@
 import QtQuick 2.0
+import QtMultimedia 5.5
 
 import "../appStructure"
 
 GameScreen {
+
     Image {
         anchors.fill: parent
 
@@ -32,6 +34,17 @@ GameScreen {
 
                 onClicked: _logic.showChooseMap = true
             }
+        }
+    }
+
+    SoundEffect {
+        id: playSound3
+        loops: -2 // INF
+        source: "../../fonts/main_theme.wav"
+
+        onLoadedChanged: {
+            print("onLoadedChanged 3")
+            playSound3.play()
         }
     }
 }

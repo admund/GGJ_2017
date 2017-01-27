@@ -2,6 +2,7 @@ TEMPLATE = app
 QT += qml quick quickcontrols2 xml #core gui qml quick quickcontrols2 xml
 
 CONFIG += c++11
+CONFIG += resources_big
 
 HEADERS += \
     src/unnamedapplication.h \
@@ -81,4 +82,7 @@ DISTFILES += \
     assets/images/plane_crushed_2.png \
     assets/images/plane_crushed_3.png \
     assets/images/plane_crushed_4.png \
-    src/features/SkillsLogic.qml
+    src/features/SkillsLogic.qml \
+    assets/images/button_back.png \
+    assets/images/button_back_hover.png \
+    assets/fonts/bezpieczne_parkowanie_1.wav

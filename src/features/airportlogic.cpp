@@ -13,6 +13,10 @@ AirportLogic::AirportLogic(QObject* parent)
     : QObject(parent)
     , m_editMode(false)
     , m_selectedPlane(-1)
+    , m_playCrashSound(false)
+    , m_playLoadupSound(false)
+    , m_playFlyawaySound(false)
+
     , m_airportGrid(new AirportGridModel(this))
     , m_planeList(new PlaneListModel(this))
     , m_flagController(new FlagControllerLogic(this))
@@ -32,6 +36,7 @@ AirportLogic::AirportLogic(QObject* parent)
 //const QString path("E:\\Projekty\\ggj2017\\UNNAMED\\UNNAMED\\json\\");
 //const QString path("json\\");
 const QString path("/Users/adrian-gardian/Projects/GGJ_2017/json/");
+//const QString path("json/");
 
 void getStringFromFile(const QString& fileName, QString& data) {
     QString filename(fileName);
@@ -69,6 +74,14 @@ void AirportLogic::loadPlanesConfig()
     }
 }
 
+float spawnPosX(int i, int cellSize) {
+    return (i % 17) * cellSize;
+}
+
+float spawnPosY(int i, int cellSize) {
+    return (int)(i / 17) * cellSize;
+}
+
 void AirportLogic::init(int levelNr)
 {
     qDebug() << "void AirportLogic::init()" << levelNr;
@@ -77,6 +90,8 @@ void AirportLogic::init(int levelNr)
     QString levelData("");
     const QString fileNameLevel(path + QString("level_") + QString::number(levelNr) + QString(".json"));
     getStringFromFile(fileNameLevel, levelData);
+
+    cellSize = (1280 - 300) / 17;
 
     QJsonObject gridObj;
     if (JsonHelpers::jsonObjectFromString(levelData, gridObj)) {
@@ -90,26 +105,41 @@ void AirportLogic::init(int levelNr)
             airportTileModel->set_tileRotation(tile["tile_rotation"].toInt());
 
             airportGrid()->addAirportTile(airportTileModel);
-        }
-    }
 
-    QString spawnsData("");
-    const QString fileNameSpawns(path + QString("spawns_level_") + QString::number(levelNr) + QString(".json"));
-    getStringFromFile(fileNameSpawns, spawnsData);
+            if (airportTileModel->tileType() == AirportTileModel::TILE_TYPE_RUNWAY_START) {
+                int spawnPosX_ = 0;
+                int spawnPosY_ = 0;
+                int spawnRotation_ = 0;
+                switch (airportTileModel->tileRotation()) {
+                    case 0:
+                        spawnPosX_ = spawnPosX(i, cellSize) - cellSize * 3;
+                        spawnPosY_ = spawnPosY(i, cellSize) + cellSize / 2;
 
-    QJsonObject spawnsObj;
-    if (JsonHelpers::jsonObjectFromString(spawnsData, spawnsObj)) {
-        QJsonArray spawns = spawnsObj["spawns"].toArray();
-//        qDebug() << "spawns" << spawns.size();
-        for (int i=0; i<spawns.size(); i++) {
-            QJsonObject spawnJson = spawns.at(i).toObject();
+                        break;
+                    case 90:
+                        spawnPosX_ = spawnPosX(i, cellSize) + cellSize / 2;
+                        spawnPosY_ = spawnPosY(i, cellSize) - cellSize * 3;
+                        spawnRotation_ = 90;
+                        break;
+                    case 180:
+                        spawnPosX_ = spawnPosX(i, cellSize) + cellSize * 3;
+                        spawnPosY_ = spawnPosY(i, cellSize) + cellSize / 2;
+                        spawnRotation_ = 180;
+                        break;
+                    case 270:
+                        spawnPosX_ = spawnPosX(i, cellSize) + cellSize / 2;
+                        spawnPosY_ = spawnPosY(i, cellSize) + cellSize * 3;
+                        spawnRotation_ = 270;
+                        break;
+                }
 
-            SpawnPointModel* spawnPointModel = new SpawnPointModel(this);
-            spawnPointModel->set_posX(spawnJson["pos_x"].toInt());
-            spawnPointModel->set_posY(spawnJson["pos_y"].toInt());
-            spawnPointModel->set_moveRotation(spawnJson["move_rotation"].toInt());
+                SpawnPointModel* spawnPointModel = new SpawnPointModel(this);
+                spawnPointModel->set_posX(spawnPosX_);
+                spawnPointModel->set_posY(spawnPosY_);
+                spawnPointModel->set_moveRotation(spawnRotation_);
 
-            spawnList.append(spawnPointModel);
+                spawnList.append(spawnPointModel);
+            }
         }
     }
 }
@@ -161,12 +191,19 @@ void AirportLogic::checkCollisions()
                     plane->goOnGrass(true);
                 } else if (tileType == AirportTileModel::TILE_TYPE_BUILDING) {
                     plane->hitBuilding();
+                    set_playCrashSound(true);
                 } else if (tileType == AirportTileModel::TILE_TYPE_SEA) {
                     plane->goToSea();
+                    set_playCrashSound(true);
                 } else if (tileType == AirportTileModel::TILE_TYPE_RUNWAY_START) {
-                    plane->goToRunwayStart();
+                    if (plane->goToRunwayStart()) {
+                        set_playFlyawaySound(true);
+                    }
                 } else if (tileType == AirportTileModel::TILE_TYPE_RAMP) {
-                    plane->goToRamp();
+                    if (!plane->isUnload()) {
+                        set_playLoadupSound(true);
+                        plane->goToRamp();
+                    }
                 }
             }
         }
@@ -178,9 +215,11 @@ void AirportLogic::checkCollisions()
                 if (planeSecRect.intersects(planeRect)) {
                     if (plane->isAlive()) {
                         plane->hitOtherPlane();
+                        set_playCrashSound(true);
                     }
                     if (planeSec->isAlive()) {
                         planeSec->hitOtherPlane();
+                        set_playCrashSound(true);
                     }
                 }
             }
@@ -227,6 +266,44 @@ void AirportLogic::spawn()
     cnt++;
 }
 
+void AirportLogic::exit()
+{
+//    qDebug() << "void AirportLogic::exit()";
+    set_selectedPlane(-1);
+    flagController()->set_selectedPlane(nullptr);
+    planeList()->clear();
+    airportGrid()->clear();
+
+    for (int i=0; i<spawnList.size(); i++) {
+        delete spawnList.at(i);
+    }
+    spawnList.clear();
+
+    score()->set_badScore(0);
+    score()->set_goodScore(0);
+
+    skills()->set_fuellSkillCnt(0);
+    skills()->set_speedUpSkillCnt(0);
+    skills()->set_doubleSkillCnt(0);
+
+    isInited = false;
+}
+
+void AirportLogic::playAgain(int levelNr)
+{
+    exit();
+    init(levelNr);
+    spawn();
+}
+
+void AirportLogic::clearMap()
+{
+    for (int i=0; i<airportGrid()->size(); i++) {
+        airportGrid()->get(i)->set_tileType(0);
+        airportGrid()->get(i)->set_tileRotation(0);
+    }
+}
+
 void AirportLogic::saveMap()
 {
     if (editMode()) {
@@ -252,29 +329,6 @@ void AirportLogic::saveMap()
     }
 }
 
-void AirportLogic::exit()
-{
-//    qDebug() << "void AirportLogic::exit()";
-    set_selectedPlane(-1);
-    flagController()->set_selectedPlane(nullptr);
-    planeList()->clear();
-    airportGrid()->clear();
-
-    for (int i=0; i<spawnList.size(); i++) {
-        delete spawnList.at(i);
-    }
-    spawnList.clear();
-
-    score()->set_badScore(0);
-    score()->set_goodScore(0);
-
-    skills()->set_fuellSkillCnt(0);
-    skills()->set_speedUpSkillCnt(0);
-    skills()->set_doubleSkillCnt(0);
-
-    isInited = false;
-}
-
 void AirportLogic::onPlaneDestroyed(int planeId)
 {
 //    qDebug() << "void AirportLogic::onPlaneDestroyed(int planeId)" << planeId;
@@ -293,8 +347,7 @@ void AirportLogic::onCheckPlaneControll(int planeId)
 
 void AirportLogic::onSpeedUpSkill()
 {
-    qDebug() << "void AirportLogic::onSpeedUpSkill()";
-
+//    qDebug() << "void AirportLogic::onSpeedUpSkill()";
     if (selectedPlane() != -1) {
         PlaneModel* plane = planeList()->get(selectedPlane());
         plane->set_speedMax(plane->speedMax() * 2);
@@ -303,7 +356,7 @@ void AirportLogic::onSpeedUpSkill()
 
 void AirportLogic::onFuelSkill()
 {
-    qDebug() << "void AirportLogic::onFuelSkill()";
+//    qDebug() << "void AirportLogic::onFuelSkill()";
     if (selectedPlane() != -1) {
         PlaneModel* plane = planeList()->get(selectedPlane());
         plane->set_fuell(plane->fuellMax());
@@ -312,7 +365,7 @@ void AirportLogic::onFuelSkill()
 
 void AirportLogic::onDoubleSkill()
 {
-    qDebug() << "void AirportLogic::onDoubleSkill()";
+//    qDebug() << "void AirportLogic::onDoubleSkill()";
     onSpeedUpSkill();
     onFuelSkill();
 }

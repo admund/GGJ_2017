@@ -68,5 +68,7 @@
         <file>miasto_name_3.png</file>
         <file>miasto_name_3_hover.png</file>
         <file>loading_4.png</file>
+        <file>button_back.png</file>
+        <file>button_back_hover.png</file>
     </qresource>
 </RCC>
